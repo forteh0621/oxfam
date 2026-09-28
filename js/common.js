@@ -538,6 +538,24 @@ function bleedSwiper(swiper, active) {
   swiper.on('resize', fit);
 }
 
+// 자동 넘김은 슬라이드가 화면에 들어와 있을 때만 돈다. 스크롤해 내려왔을 때 첫 카드부터 2초 보여 주기 위해
+// 처음엔 멈춰 두고, 화면에 들어오면 시작한다. canPlay가 false인 동안(등장 연출 중)은 시작하지 않는다
+function autoplayInView(swiper, trigger, canPlay) {
+  if (!swiper.params.autoplay || !swiper.params.autoplay.enabled) return null;
+
+  swiper.autoplay.stop();
+
+  return ScrollTrigger.create({
+    trigger: trigger,
+    start: 'top 80%',
+    end: 'bottom 20%',
+    onToggle: function (self) {
+      if (self.isActive && (!canPlay || canPlay())) swiper.autoplay.start();
+      else swiper.autoplay.stop();
+    }
+  });
+}
+
 // 피드백: 모바일에서는 네 항목을 좌우로 넘겨 보게 한다.
 // 창 크기가 경계를 넘나들 수 있으므로 스와이퍼 구조를 그때그때 씌우고 걷어낸다
 function doMobileSlide() {
@@ -548,6 +566,8 @@ function doMobileSlide() {
   var swiper = null;
   var wrap = null;
   var timer = null;
+  var play = null;
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   function build() {
     if (swiper) return false;
@@ -563,8 +583,14 @@ function doMobileSlide() {
     // 카드 폭은 CSS가 정한다(모바일: 컨테이너의 88.4% = 360에서 283, 태블릿: 340)
     swiper = new Swiper(wrap, {
       slidesPerView: 'auto',
-      spaceBetween: 22,
+      spaceBetween: 19.22,
       a11y: { enabled: false },
+      // 피드백: 2초 보여 준 뒤 자동으로 넘기고, 끝에 닿으면 처음으로 되감는다 (순환하면 스크롤바가 튄다)
+      autoplay: reduceMotion ? false : {
+        delay: 2000,
+        disableOnInteraction: false
+      },
+      rewind: true,
       scrollbar: {
         el: pager,
         draggable: true
@@ -578,6 +604,7 @@ function doMobileSlide() {
       }
     });
     bleedSwiper(swiper);
+    play = autoplayInView(swiper, wrap);
 
     return true;
   }
@@ -586,6 +613,8 @@ function doMobileSlide() {
   function destroy() {
     if (!swiper) return false;
 
+    if (play) play.kill();
+    play = null;
     swiper.destroy(true, true);
     swiper = null;
 
@@ -732,13 +761,13 @@ function rollSlide() {
     a11y: { enabled: false },
     // 화면에 걸린 카드에만 swiper-slide-visible이 붙는다 (바깥 카드를 CSS로 감춘다)
     watchSlidesProgress: true,
-    // 피드백: 자동 넘김을 끈다 (다시 켤 경우 대비해 보류)
-    autoplay: false,
-    // autoplay: reduceMotion ? false : {
-    //   delay: 5000,
-    //   disableOnInteraction: false,
-    //   pauseOnMouseEnter: true
-    // },
+    // PC는 자동 넘김을 끈다(이전 피드백). 슬라이드로 바뀌는 폭은 What We Do와 같이
+    // 2초 보여 준 뒤 자동으로 넘기고 끝에서 처음으로 되감는다(피드백)
+    autoplay: reduceMotion || !isMobile ? false : {
+      delay: 2000,
+      disableOnInteraction: false
+    },
+    rewind: isMobile,
     slidesPerGroup: 1,
     // 모바일에 옆으로 넘길 수 있다는 표시를 둔다
     scrollbar: {
@@ -774,8 +803,11 @@ function rollSlide() {
 
   var rollIn = 140;
   // 처음 화면에 보이는 카드만 굴러 들어온다.
-  // (자동 넘김을 다시 켜면: 등장 전에 넘어가 카드가 어긋나지 않게 여기서 멈췄다가 등장이 끝나면 다시 시작)
-  // swiper.autoplay.stop();
+  // 자동 넘김은 등장 전에 넘어가 카드가 어긋나지 않게 멈춰 두었다가 등장이 끝나면 시작한다
+  var rolled = false;
+  var play = autoplayInView(swiper, '.sc-roll .roll-slide', function () {
+    return rolled;
+  });
 
   var cards = el.querySelectorAll('.roll-frame.swiper-slide-visible');
   gsap.set(cards, { autoAlpha: 0 });
@@ -786,9 +818,10 @@ function rollSlide() {
     once: true,
     onEnter: function () {
       gsap.timeline({
-        // onComplete: function () {
-        //   swiper.autoplay.start();
-        // }
+        onComplete: function () {
+          rolled = true;
+          if (play && play.isActive) swiper.autoplay.start();
+        }
       })
         .fromTo(cards, {
           x: rollIn,
@@ -893,11 +926,14 @@ function goalReveal() {
   var bg = section.querySelector('.goal-bg');
   var photo = section.querySelector('.goal-bg .bg');
   var tit = section.querySelector('.tit');
+  var mm = gsap.matchMedia();
+
+  // 피드백: 스크롤을 덜 해도 완성되도록 사진이 처음부터 크게 확대된 상태(72%×45% → 86%×70%)에서 시작한다
   function build(trigger) {
     gsap.timeline({ defaults: { ease: 'none' }, scrollTrigger: trigger })
       .fromTo(bg, {
-        width: '72%',
-        height: '45%',
+        width: '86%',
+        height: '70%',
         borderRadius: 16
       }, {
         width: '100%',
@@ -910,16 +946,30 @@ function goalReveal() {
       .fromTo(tit, { autoAlpha: 0, y: 40 }, { autoAlpha: 1, y: 0, duration: 3 }, 6);
   }
 
-  // 화면 크기와 상관없이 섹션을 고정해 두고 그 자리에서 펼친다
-  build({
-    trigger: section,
-    start: 'top top',
-    end: '+=100%',
-    scrub: 1,
-    pin: true,
-    // anticipatePin은 스크롤 속도로 미리 고정하는데, Lenis와 함께 빠르게 스크롤하면
-    // 고정 지점 전에 박스가 한 번에 튀어 올라 쓰지 않는다
-    invalidateOnRefresh: true
+  // 섹션을 고정해 두고 그 자리에서 펼친다. 피드백으로 고정 길이를 화면 높이의 100% → 50%로 줄였다
+  mm.add('(min-width: 769px)', function () {
+    build({
+      trigger: section,
+      start: 'top top',
+      end: '+=50%',
+      scrub: 1,
+      pin: true,
+      // anticipatePin은 스크롤 속도로 미리 고정하는데, Lenis와 함께 빠르게 스크롤하면
+      // 고정 지점 전에 박스가 한 번에 튀어 올라 쓰지 않는다
+      invalidateOnRefresh: true
+    });
+  });
+
+  // 모바일은 배너가 화면보다 낮아(네 사람이 다 보이게 줄임) 고정하면 다음 섹션이 비친다.
+  // 고정 없이 배너가 올라오는 동안 펼쳐져 화면 가운데에 올 때 완성된다
+  mm.add('(max-width: 768px)', function () {
+    build({
+      trigger: section,
+      start: 'top 90%',
+      end: 'center center',
+      scrub: 1,
+      invalidateOnRefresh: true
+    });
   });
 }
 

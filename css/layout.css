@@ -277,9 +277,16 @@
     margin-right: 20px;
   }
 
-  /* 아이폰 노치·상태바와 겹치지 않게 그만큼 아래로 민다 */
+  /* 아이폰 노치·상태바와 겹치지 않게 그만큼 아래로 민다.
+     피드백: 모바일은 흰 박스 없이 로고만 사진 위에 두고, 고정하지 않아 위로 스크롤해도 다시 나타나지 않는다 */
   .header {
+    position: absolute;
     padding-top: env(safe-area-inset-top, 0px);
+    background: transparent;
+  }
+
+  .header.is-hide {
+    transform: none;
   }
 
   .header .inner {
@@ -352,10 +359,6 @@
 
   .ft-detail li + li {
     margin-top: 10px;
-  }
-
-  .ft-detail li:last-child {
-    line-height: 1;
   }
 
   /* 모바일은 전화번호 뒤에서 이미 줄을 바꾸고, 아주 좁은 폰에서는 넘치지 않게 풀어 둔다 */
