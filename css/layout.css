@@ -319,13 +319,16 @@
   }
   */
 
+  /* 시안(754:4825): 96×96, 360×680 화면에서 오른쪽 13·아래 55 */
   .quick-menu {
-    right: 12px;
-    bottom: 40px;
+    right: 13px;
+    bottom: 55px;
     gap: 9px;
   }
 
   .quick-join {
+    width: 96px;
+    height: 96px;
     font-size: 1.125rem;
   }
 
