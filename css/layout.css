@@ -90,6 +90,12 @@
 }
 
 /* 등장·퇴장은 JS가 만드는 .quick-ghost가 대신하므로 평소에는 숨겨 둔다 */
+.quick-join,
+.quick-ghost {
+  font-family: "dunkel-sans-expanded", "Pretendard", "Noto Sans KR", sans-serif;
+  font-weight: 900;
+}
+
 .quick-join {
   width: 120px;
   height: 120px;
@@ -112,7 +118,6 @@
   border-radius: 999px;
   background: var(--color-green);
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
-  font-weight: 800;
   letter-spacing: -0.02em;
   white-space: nowrap;
   color: #fff;
