@@ -180,45 +180,54 @@
   color: #424242;
 }
 
-.ft-company .name,
-.ft-detail strong {
-  font-weight: 600;
-}
-
-.ft-company address {
-  margin-top: 4px;
+/* 피드백 참고 이미지(767:5049): 회사명 아래에 항목명(굵게)과 값을 두 열로 맞춘 표 형태 */
+.ft-company .name {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #222;
 }
 
 .ft-detail {
-  margin-top: 19px;
+  margin-top: 22px;
 }
 
-.ft-detail li + li {
-  margin-top: 6px;
+.ft-detail div {
+  display: flex;
 }
 
-.ft-detail .bar {
-  color: #e0e0e0;
+.ft-detail div + div {
+  margin-top: 10px;
 }
 
-/* 운영시간이 "12:30-" / "13:30)"처럼 중간에서 끊기지 않게 한 덩어리로 다음 줄로 넘긴다.
-   번호(고유번호·전화·시간)는 폭이 모자라도 하이픈에서 쪼개지지 않게 한다 */
-.ft-detail .time,
+.ft-detail dt {
+  flex: none;
+  width: 200px;
+  font-weight: 700;
+  color: #222;
+}
+
+.ft-detail dd {
+  min-width: 0;
+}
+
+/* 번호는 폭이 모자라도 하이픈에서 쪼개지지 않게 한다 */
 .ft-detail .num {
   white-space: nowrap;
 }
 
 .ft-copy {
   margin-top: 30px;
-  color: #757575;
+  font-size: 0.875rem;
+  font-weight: 700;
 }
 
+/* 왼쪽 정보 높이만큼 늘여 메뉴는 회사명 줄, SNS는 저작권 줄에 맞춘다 */
 .ft-side {
   display: flex;
   flex-direction: column;
+  align-self: stretch;
   align-items: flex-end;
   justify-content: space-between;
-  min-height: 160px;
 }
 
 .ft-menu {
@@ -346,24 +355,15 @@
     display: contents;
   }
 
-  /* 시안(667:4231) 줄 위치: 이름 0·주소 35·대표자 69·문의 100·이메일 152·메뉴 200~296·SNS 364·저작권 420.
-     이메일·메뉴·저작권은 시안이 행간 1 */
-  .ft-company address {
-    margin-top: 14px;
-  }
-
+  /* 시안(667:4231) 순서: 회사정보 → 메뉴 → SNS → 저작권. 메뉴·저작권은 시안이 행간 1.
+     항목명 열은 좁은 화면에 맞춰 줄이고, 긴 주소는 값 열 안에서 줄바꿈된다 */
   .ft-detail {
     order: 2;
-    margin-top: 13px;
+    margin-top: 16px;
   }
 
-  .ft-detail li + li {
-    margin-top: 10px;
-  }
-
-  /* 모바일은 전화번호 뒤에서 이미 줄을 바꾸고, 아주 좁은 폰에서는 넘치지 않게 풀어 둔다 */
-  .ft-detail .time {
-    white-space: normal;
+  .ft-detail dt {
+    width: 80px;
   }
 
   .ft-menu {

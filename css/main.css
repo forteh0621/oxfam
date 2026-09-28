@@ -1827,28 +1827,29 @@
   }
 
   /* 이 폭부터 .inner 여백이 20px 고정이라 넘겨 쓰는 값도 맞춘다 */
-  /* 피드백 수정 시안(754:4962): 카드 241.89×206.32 = 컨테이너 320의 75.59%. 스와이퍼 상자는 화면 폭이라
-     컨테이너 폭은 JS(bleedSwiper)가 --inner-w로 넘겨 준다. 안내 문구가 빠져 제목 아래 바로 카드 */
+  /* 피드백: We Roll처럼 화면에 1.8장 정도 보이게 카드 폭을 컨테이너 320의 57%(182, 간격 12 — JS)로 줄인다.
+     스와이퍼 상자는 화면 폭이라 컨테이너 폭은 JS(bleedSwiper)가 --inner-w로 넘겨 준다.
+     폭이 좁아 설명은 줄바꿈을 자동 흐름에 맡기고, 높이는 가장 긴 카드에 맞춰 같이 늘어난다 */
   .sc-do .do-swiper {
     margin-top: 40px;
   }
 
   .do-list li {
-    width: calc(var(--inner-w, 320px) * 0.7559);
+    width: calc(var(--inner-w, 320px) * 0.57);
     min-height: 0;
-    height: 206.32px;
-    gap: 8.54px;
-    padding: 11.96px;
+    height: auto;
+    gap: 8px;
+    padding: 16px 10px;
     border-radius: 17.09px;
   }
 
   .do-icon {
-    width: 51.26px;
-    height: 51.26px;
+    width: 40px;
+    height: 40px;
   }
 
   .do-list .tit {
-    font-size: 1.2815rem;
+    font-size: 1rem;
   }
 
   .do-sub {
@@ -1857,8 +1858,12 @@
 
   .do-desc {
     width: 100%;
-    font-size: 0.8543rem;
+    font-size: 0.75rem;
     white-space: normal;
+  }
+
+  .do-desc br {
+    display: none;
   }
 
   .do-deco {

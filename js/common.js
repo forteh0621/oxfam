@@ -580,10 +580,10 @@ function doMobileSlide() {
     list.parentNode.insertBefore(wrap, list);
     wrap.appendChild(list);
 
-    // 카드 폭은 CSS가 정한다(모바일: 컨테이너의 88.4% = 360에서 283, 태블릿: 340)
+    // 카드 폭은 CSS가 정한다(모바일: 컨테이너의 57% = 360에서 182로 1.8장, 태블릿: 340)
     swiper = new Swiper(wrap, {
       slidesPerView: 'auto',
-      spaceBetween: 19.22,
+      spaceBetween: 12,
       a11y: { enabled: false },
       // 피드백: 2초 보여 준 뒤 자동으로 넘기고, 끝에 닿으면 처음으로 되감는다 (순환하면 스크롤바가 튄다)
       autoplay: reduceMotion ? false : {
