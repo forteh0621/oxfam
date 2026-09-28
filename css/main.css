@@ -1827,29 +1827,29 @@
   }
 
   /* 이 폭부터 .inner 여백이 20px 고정이라 넘겨 쓰는 값도 맞춘다 */
-  /* 피드백: We Roll처럼 화면에 1.8장 정도 보이게 카드 폭을 컨테이너 320의 57%(182, 간격 12 — JS)로 줄인다.
-     스와이퍼 상자는 화면 폭이라 컨테이너 폭은 JS(bleedSwiper)가 --inner-w로 넘겨 준다.
-     폭이 좁아 설명은 줄바꿈을 자동 흐름에 맡기고, 높이는 가장 긴 카드에 맞춰 같이 늘어난다 */
+  /* 참고 사이트(campaigns.oxfam.or.kr/water_2026 sec3): 스와이퍼를 화면 끝까지 넓히고 좌우 안쪽 여백 8.3333vw,
+     카드는 한 장(360에서 300)씩, 간격 15(JS). 양옆으로 이웃 카드가 조금씩 보인다.
+     카드 폭은 스와이퍼가 안쪽 여백을 뺀 폭으로 넣어 준다. 안쪽 요소는 수정 시안(754:4962) 크기 */
   .sc-do .do-swiper {
-    margin-top: 40px;
+    margin: 40px -20px 0;
+    padding: 0 8.3333vw;
   }
 
   .do-list li {
-    width: calc(var(--inner-w, 320px) * 0.57);
     min-height: 0;
     height: auto;
-    gap: 8px;
-    padding: 16px 10px;
+    gap: 8.54px;
+    padding: 16px 11.96px;
     border-radius: 17.09px;
   }
 
   .do-icon {
-    width: 40px;
-    height: 40px;
+    width: 51.26px;
+    height: 51.26px;
   }
 
   .do-list .tit {
-    font-size: 1rem;
+    font-size: 1.2815rem;
   }
 
   .do-sub {
@@ -1858,12 +1858,8 @@
 
   .do-desc {
     width: 100%;
-    font-size: 0.75rem;
+    font-size: 0.8543rem;
     white-space: normal;
-  }
-
-  .do-desc br {
-    display: none;
   }
 
   .do-deco {

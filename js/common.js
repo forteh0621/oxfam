@@ -580,14 +580,17 @@ function doMobileSlide() {
     list.parentNode.insertBefore(wrap, list);
     wrap.appendChild(list);
 
-    // 카드 폭은 CSS가 정한다(모바일: 컨테이너의 57% = 360에서 182로 1.8장, 태블릿: 340)
+    // 모바일은 참고 사이트(water_2026 sec3)처럼 한 장씩(스와이퍼 안쪽 여백을 뺀 폭, 간격 15),
+    // 태블릿은 CSS가 정한 카드 폭(340)으로 들어가는 만큼만 보여 준다
     swiper = new Swiper(wrap, {
-      slidesPerView: 'auto',
-      spaceBetween: 12,
+      slidesPerView: 1,
+      spaceBetween: 15,
       a11y: { enabled: false },
-      // 피드백: 2초 보여 준 뒤 자동으로 넘기고, 끝에 닿으면 처음으로 되감는다 (순환하면 스크롤바가 튄다)
+      // 참고 사이트와 같은 속도: 1.5초 보여 준 뒤 1초 동안 넘긴다.
+      // 끝에 닿으면 처음으로 되감는다 (순환하면 스크롤바가 튄다)
+      speed: 1000,
       autoplay: reduceMotion ? false : {
-        delay: 2000,
+        delay: 1500,
         disableOnInteraction: false
       },
       rewind: true,
@@ -603,7 +606,10 @@ function doMobileSlide() {
         }
       }
     });
-    bleedSwiper(swiper);
+    // 모바일은 CSS가 스와이퍼를 화면 끝까지 넓히고 안쪽 여백으로 카드를 가운데 두므로 태블릿에서만 맞춘다
+    bleedSwiper(swiper, function () {
+      return window.innerWidth > 768;
+    });
     play = autoplayInView(swiper, wrap);
 
     return true;
