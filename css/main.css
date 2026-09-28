@@ -1558,7 +1558,7 @@
   /* Roll도 같은 지점에서 슬라이드로 바뀐다. 원이 작아져 제목이 넘치던 구간을 없앤다 */
   .sc-roll {
     height: auto;
-    padding: 84px 0 0px;
+    padding: 80px 0;
   }
 
   .sc-roll .swipe-hint {
