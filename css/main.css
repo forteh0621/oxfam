@@ -353,7 +353,10 @@
 /* 제목 바로 왼쪽이라 제목 왼쪽 끝(여백 40px 또는 폭/2 − 720)에서 시안 간격 135만큼 왼쪽에 둬 겹치지 않게,
    좁으면 화면 끝에 반쯤(-19.2) 걸친다 */
 .who-deco .spr07 {
-  left: max(-19.2 * var(--px-pc), calc(max(40px, 50% - 720px) - 135 * var(--px-pc)));
+  left: max(
+    -19.2 * var(--px-pc),
+    calc(max(40px, 50% - 720px) - 135 * var(--px-pc))
+  );
   top: 253px;
   width: calc(56 * var(--px-pc));
   height: calc(65 * var(--px-pc));
