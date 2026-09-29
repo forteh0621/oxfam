@@ -281,6 +281,24 @@
   background: #adc958;
 }
 
+/* 이전 버전 — 되돌릴 경우 위 .sc-who를 아래 중 하나로 바꾼다 (.who-film의 height: var(--film-h)는 둘 다 그대로 둬도 된다)
+   1) 16:9 유지, 다 커졌을 때 폭 1440. 화면이 낮으면 영상 아래가 화면 밖으로 나간다
+.sc-who {
+  --film-w: min(1440px, 100vw - 80px);
+  --film-h: calc(var(--film-w) * 9 / 16);
+  padding: 100px 0;
+  background: #adc958;
+}
+   2) 16:9 유지, 한 화면에 들어오도록 영상 폭을 화면 높이에 맞춰 줄인다 (1080 화면에서 1356, 900 화면에서 1036)
+.sc-who {
+  --film-w: min(1440px, 100vw - 80px, (100dvh - 317px) * 16 / 9);
+  --film-h: calc(var(--film-w) * 9 / 16);
+  height: 100dvh;
+  padding-top: 100px;
+  background: #adc958;
+}
+*/
+
 .sc-who .inner {
   z-index: 1;
 }
