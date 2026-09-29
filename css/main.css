@@ -803,9 +803,10 @@
   color: #221e1f;
 }
 
+/* 피드백: 박스 안 아이콘을 한 번 더 줄인다 (60 → 51.26 → 44) */
 .do-icon {
-  width: clamp(39.4px, calc(4.161vw - 3.24px), 51.26px);
-  height: clamp(39.4px, calc(4.161vw - 3.24px), 51.26px);
+  width: clamp(39.4px, calc(4.161vw - 3.24px), 44px);
+  height: clamp(39.4px, calc(4.161vw - 3.24px), 44px);
   background: #fe71ad;
   -webkit-mask-repeat: no-repeat;
   -webkit-mask-position: center;
@@ -1874,8 +1875,8 @@
   }
 
   .do-icon {
-    width: 51.26px;
-    height: 51.26px;
+    width: 44px;
+    height: 44px;
   }
 
   .do-list .tit {
@@ -2048,6 +2049,11 @@
 
   .sc-crew {
     padding: 86px 0 85px;
+  }
+
+  /* 피드백 줄바꿈(차례입니다. / 되어, / 굴려요!)대로 첫 줄이 한 줄에 들어가도록 32 → 31px (360에서 325 → 315px) */
+  .sc-crew h2.tit {
+    font-size: 1.9375rem;
   }
 
   .crew-rows {
