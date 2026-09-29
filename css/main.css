@@ -781,7 +781,8 @@
   color: #fff;
 }
 
-/* 피드백: 항목을 흰 카드로 묶고 아이콘은 핑크, 제목은 진한 색으로 */
+/* 피드백: 항목을 흰 카드로 묶고 아이콘은 핑크, 제목은 진한 색으로.
+   카드는 네 장이 컨테이너 폭을 똑같이 나눠 꽉 채운다 (최대 너비를 두면 오른쪽이 비어 왼쪽으로 쏠려 보였다) */
 .do-list li {
   flex: 1 1 0;
   display: flex;
@@ -790,7 +791,6 @@
   justify-content: center;
   gap: clamp(6.6px, calc(0.694vw - 0.54px), 8.54px);
   min-width: 0;
-  max-width: 290.5px;
   min-height: clamp(190px, calc(20.11vw - 15.66px), 247.8px);
   padding: clamp(9.2px, calc(0.971vw - 0.76px), 11.96px);
   border-radius: clamp(13.1px, calc(1.387vw - 1.08px), 17.09px);
