@@ -803,14 +803,50 @@ function doStepScroll() {
   // 피드백: 슬라이드로 보는 폭에서는 위 카드가 자동으로 넘어갈 때마다 크림보이가 도넛을 밀며
   // 그 진행 비율만큼 좌우로 걸어간다 (처음으로 되감길 땐 돌아서서 왼쪽으로). 넘김 속도(1초)와 같은 시간
   mm.add('(max-width: 1024px) and (prefers-reduced-motion: no-preference)', function () {
+    // 피드백: 멈출 때 다리가 어색하게 모여 있었다 → 다리를 활짝 편 프레임(0번·12번, 반 걸음 간격)에서
+    // 출발하고 멈추도록, 이동 거리를 반 걸음의 정수배로 나눠 보폭을 그때그때 맞춘다
+    var rest = 0;
+
+    function setFrame(phase) {
+      var p = ((phase % 1) + 1) % 1;
+      var frame = Math.min(Math.round(p * walkFrames), walkFrames) % walkFrames;
+      var pos = (frame / (walkFrames - 1)) * 100 + '% 0';
+
+      char.style.webkitMaskPosition = pos;
+      char.style.maskPosition = pos;
+    }
+
     function onSlide(e) {
       var to = (deco.parentElement.clientWidth - deco.offsetWidth) * e.detail;
       var from = gsap.getProperty(deco, 'x');
-      if (Math.abs(to - from) < 1) return;
+      var dist = Math.abs(to - from);
+      if (dist < 1) return;
+
+      var k = char.offsetHeight / 136.8 || 1;
+      var steps = Math.max(1, Math.round(dist / (stride * k / 2)));
+      var start = rest;
 
       gsap.set(deco, { scaleX: to < from ? -1 : 1 });
-      gsap.to(deco, { x: to, duration: 1, ease: 'power1.inOut', overwrite: 'auto', onUpdate: walk });
+      gsap.to(deco, {
+        x: to,
+        duration: 1,
+        ease: 'power1.inOut',
+        overwrite: 'auto',
+        onUpdate: function () {
+          var x = gsap.getProperty(deco, 'x');
+          var dir = to < from ? -1 : 1;
+
+          setFrame(start + (Math.abs(x - from) / dist) * (steps / 2));
+          gsap.set(donut, { rotation: ((dir * x) / (donutRadius * k)) * (180 / Math.PI) });
+        },
+        onComplete: function () {
+          rest = (start + steps / 2) % 1;
+          setFrame(rest);
+        }
+      });
     }
+
+    setFrame(rest);
 
     section.addEventListener('doslide', onSlide);
 

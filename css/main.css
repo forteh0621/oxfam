@@ -107,6 +107,12 @@
   padding-top: 33dvh;
 }
 
+/* 피드백: 너무 두꺼워 보인다 → 서체는 900 한 굵기뿐이라 획은 못 줄이고,
+   제목 공통 자간(-0.02em)을 넓혀 글자 덩어리가 덜 빽빽해 보이게 한다 */
+.sc-visual .tit {
+  letter-spacing: 0.03em;
+}
+
 .scroll-hint {
   position: absolute;
   left: 50%;
@@ -1292,10 +1298,12 @@
   filter: brightness(0.9);
 }
 
+/* 피드백: 화살표가 오른쪽으로 움직이는 모션은 빼고 버튼 확대만 남긴다 (되돌릴 경우 대비해 보류)
 .btn-next:hover img,
 .btn-next:focus-visible img {
   transform: translateX(4px);
 }
+*/
 
 .btn-next:active {
   transform: scale(0.95);
@@ -1491,9 +1499,7 @@
    거기서 문구 왼쪽 여백(40px, 1520 이상은 폭/2 − 720)과 간격 50px을 뺀 자리에
    두 줄 문구(글자 크기의 7.31배 폭)가 들어가도록 줄인다 */
 @media all and (min-width: 769px) {
-  /* 피드백: 유독 두꺼워 보인다 → 제목 공통 자간(-0.02em)을 풀어 글자 사이를 띄운다 (서체는 900 한 굵기뿐) */
   .sc-visual .tit {
-    letter-spacing: 0;
     font-size: clamp(
       2rem,
       min(calc(9.85vw - 7.21dvh - 12.3px), calc(3.01vw - 7.21dvh + 91.7px)),
@@ -1655,7 +1661,10 @@
 
   /* 모바일 시안(122:1522) 사진 구도. 두 얼굴의 가운데를 기준점으로 잡아 화면 비율이 달라도 얼굴이 안 잘린다.
      헤더 흰 박스가 없어져 사진은 화면 맨 위부터 채운다 */
+  /* 피드백: 스크롤하면 사진이 확대돼 보였다. 주소창이 줄어들 때마다 dvh 높이가 커지며 사진이 다시 채워졌기 때문 →
+     모바일은 주소창과 상관없이 변하지 않는 svh로 높이를 고정한다 */
   .sc-visual {
+    height: 100svh;
     background: #000;
   }
 
