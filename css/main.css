@@ -1979,8 +1979,10 @@
     border-width: 5px;
   }
 
+  /* 두 줄 제목이 시안 자리(윗변 62.45%)에 오도록 아랫변 18%에 맞춘다. 줄이 많은 제목은 위로 늘어나 원 아래로 잘리지 않는다 */
   .roll-card .tit {
-    top: 62.45%;
+    top: auto;
+    bottom: 18%;
     padding: 0 12px;
     font-size: 0.8125rem;
     line-height: 1.3;

@@ -902,24 +902,45 @@ function titleFadeUp() {
   }
 }
 
-// Donut Story는 제목 묶음(공통) 두 줄 뒤에 나머지 글이 세 번째로 이어서 떠오른다
+// Donut Story: 시안 메모(소개 영역 — 스크롤에 따라 텍스트를 나눠 보여 준다)대로 네 덩어리로 나눠 떠오른다.
+// ① 제목 묶음(공통 titleFadeUp) ② 첫 두 문단 ③ 세 번째 문단 ④ 강조 문구 + 주석.
+// 한 번에 여러 덩어리가 화면에 들어오면 앞 덩어리가 시작한 뒤 0.35초씩 차례로 이어서 떠오른다
 function storyTextUp() {
   var section = document.querySelector('.sc-story');
   if (!section || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-  // 나머지 글은 여러 덩어리라도 한꺼번에 올라와야 세 등분이 된다
-  gsap.fromTo(section.querySelectorAll('.story-txt, .story-point, .story-note'), { autoAlpha: 0, y: 40 }, {
-    autoAlpha: 1,
-    y: 0,
-    duration: 1.1,
-    ease: 'power3.out',
-    delay: TITLE_STEP * 2,
-    clearProps: 'opacity,visibility,transform',
-    scrollTrigger: {
-      trigger: section.querySelector('.tit-group'),
-      start: TITLE_START,
-      once: true
-    }
+  var p = section.querySelectorAll('.story-txt p');
+  var steps = [
+    [p[0], p[1]],
+    [p[2]],
+    [section.querySelector('.story-point'), section.querySelector('.story-note')]
+  ];
+  var gap = 0.35;
+  var next = 0;
+
+  steps.forEach(function (items) {
+    gsap.set(items, { autoAlpha: 0, y: 40 });
+
+    ScrollTrigger.create({
+      trigger: items[0],
+      // 첫 덩어리가 제목(화면 60%에서 시작)보다 먼저 뜨지 않도록 조금 더 올라왔을 때 시작
+      start: 'top 70%',
+      once: true,
+      onEnter: function () {
+        var now = gsap.ticker.time;
+        var delay = Math.max(0, next - now);
+        next = now + delay + gap;
+
+        gsap.to(items, {
+          autoAlpha: 1,
+          y: 0,
+          duration: 1.1,
+          delay: delay,
+          ease: 'power3.out',
+          clearProps: 'opacity,visibility,transform'
+        });
+      }
+    });
   });
 }
 
