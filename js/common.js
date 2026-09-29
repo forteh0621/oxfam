@@ -382,6 +382,9 @@ function whoIntro() {
         end: '+=60%',
         scrub: 1,
         pin: true,
+        // 바로 아래 What We Do도 고정 구간이라, 이 고정 길이가 먼저 계산돼야 그 시작점이 밀리지 않는다
+        // (순서가 뒤바뀌면 What We Do가 648px 일찍 고정되며 화면 위로 튀어 올랐다)
+        refreshPriority: 2,
         invalidateOnRefresh: true
       }
     })
@@ -750,6 +753,8 @@ function doStepScroll() {
         },
         pin: true,
         scrub: true,
+        // 위 Who We Are 고정(2) 다음, 나머지 트리거보다 먼저 계산한다
+        refreshPriority: 1,
         invalidateOnRefresh: true
       }
     });
