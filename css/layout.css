@@ -180,7 +180,7 @@
 /* 시안(667:3124): 본문과 같은 1440 폭, 위아래 40, 글자 16px 행간 1.3.
    줄 간격은 시안 줄 위치(0·25·65·90·118·169)에 맞춘 값 */
 .footer {
-  padding: 40px 0;
+  padding: 40px 0 120px;
   border-top: 1px solid #e0e0e0;
   background: #fff;
 }
