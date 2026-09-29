@@ -270,12 +270,14 @@
 }
 
 /* Who We Are */
-/* 제목은 한 줄, 영상은 다 커졌을 때 컨테이너 폭(1440, 좁으면 화면 − 80)의 16:9
-   (위 여백 100 + 제목 117 + 간격 40 = 영상 위 257, 아래 여백 100) */
+/* 제목(한 줄)과 영상이 한 화면에 들어온다. 영상은 다 커졌을 때 컨테이너 폭(1440, 좁으면 화면 − 80)을 채우고,
+   높이는 화면에서 남는 만큼(위 여백 100 + 제목 117 + 간격 40 = 영상 위 257, 아래 여백 60).
+   16:9 비율에 묶지 않되 화면이 아주 길어도 16:9보다 길어지지는 않게 한다 */
 .sc-who {
   --film-w: min(1440px, 100vw - 80px);
-  --film-h: calc(var(--film-w) * 9 / 16);
-  padding: 100px 0;
+  --film-h: min(var(--film-w) * 9 / 16, 100dvh - 317px);
+  height: 100dvh;
+  padding-top: 100px;
   background: #adc958;
 }
 
@@ -379,6 +381,7 @@
 .who-film {
   position: relative;
   width: var(--film-w);
+  height: var(--film-h);
   margin: 40px auto 0;
   aspect-ratio: 16 / 9;
   overflow: hidden;
@@ -1525,9 +1528,10 @@
     padding: 80px 0;
   }
 
-  /* 한 화면에 맞추는 크기는 PC만. 좁은 화면은 컨테이너 폭을 그대로 쓴다 */
+  /* 한 화면에 맞추는 크기는 PC만. 좁은 화면은 컨테이너 폭에 비율(16:9, 모바일은 아래에서 따로)대로 */
   .who-film {
     width: auto;
+    height: auto;
   }
 
   .who-deco .spr {
