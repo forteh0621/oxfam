@@ -202,12 +202,15 @@
   background: #f7f7eb;
 }
 
+/* 피드백: 지구를 0.8배로 줄인다. 지구만 줄이면 롤링 패스(초록 띠)가 지구보다 두꺼워 삐져나오므로
+   SVG 전체를 0.8배(3771.87×939.53)로 줄이고, 끝점(4431, 532.5 → 3544.8, 426)이 원래 자리
+   (가로 50% + 347, 위 609.5)에 오도록 옮긴다 */
 .story-track {
   position: absolute;
-  left: calc(50% - 4084px);
-  top: 77px;
-  width: 4714.84px;
-  height: 1174.41px;
+  left: calc(50% - 3197.8px);
+  top: 183.5px;
+  width: 3771.87px;
+  height: 939.53px;
   overflow: visible;
   transform: rotate(-0.14deg);
 }
@@ -1731,13 +1734,13 @@
     padding: 84px 0 80px;
   }
 
-  /* 트랙을 0.165배(778px)로 줄이면 도넛(JS에서 0.8배, 545.6)이 90px.
-     트랙 끝점(4431, 532.5 → 731, 88)을 제목 오른쪽(가운데 + 115, 위 118)에 맞춘다 */
+  /* 트랙을 0.132배(622.2px)로 줄이면 도넛(682)이 90px.
+     트랙 끝점(4431, 532.5 → 584.8, 70.3)을 제목 오른쪽(가운데 + 115, 위 118)에 맞춘다 */
   .story-track {
-    left: calc(50% + 115px - 731px);
-    top: 30px;
-    width: 778px;
-    height: 193.8px;
+    left: calc(50% + 115px - 584.8px);
+    top: 47.7px;
+    width: 622.2px;
+    height: 155px;
   }
 
   .story-txt {

@@ -1081,9 +1081,9 @@ function storyDonutRoll() {
   var mask = svg.querySelector('.track-mask');
   var donut = svg.querySelector('.track-donut');
   var total = guide.getTotalLength();
-  // 피드백: 지구를 조금 줄이고(0.8배), 다 굴러왔을 때 북반구가 위로 똑바로 서게(원래 그림 각도 0) 한다
-  var scale = 0.8;
-  var radius = 341 * scale;
+  // 피드백: 다 굴러왔을 때 북반구가 위로 똑바로 서게(원래 그림 각도 0) 한다.
+  // 지구 크기는 롤링 패스와 비율이 맞도록 SVG 전체를 CSS에서 줄인다 (.story-track)
+  var radius = 341;
   var endAngle = 0;
   var viewWidth = svg.viewBox.baseVal.width;
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1109,7 +1109,7 @@ function storyDonutRoll() {
     var pt = guide.getPointAtLength(len);
     var angle = endAngle - ((total - len) / radius) * (180 / Math.PI);
 
-    donut.setAttribute('transform', 'translate(' + pt.x + ' ' + pt.y + ') rotate(' + angle + ') scale(' + scale + ')');
+    donut.setAttribute('transform', 'translate(' + pt.x + ' ' + pt.y + ') rotate(' + angle + ')');
     mask.setAttribute('width', pt.x);
   }
 
