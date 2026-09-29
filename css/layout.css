@@ -89,13 +89,8 @@
   gap: 12px;
 }
 
-/* 등장·퇴장은 JS가 만드는 .quick-ghost가 대신하므로 평소에는 숨겨 둔다 */
-.quick-join,
-.quick-ghost {
-  font-family: "dunkel-sans-expanded", "Pretendard", "Noto Sans KR", sans-serif;
-  font-weight: 900;
-}
-
+/* 피드백: 굴러 내려오는 모션을 없애고 제자리에서 살짝 커지며 나타난다 (js quickMenu가 .is-show를 붙인다).
+   글꼴은 가독성을 위해 본문과 같은 Pretendard. 등장 크기는 호버 확대(transform)와 겹치지 않게 scale 속성으로 */
 .quick-join {
   width: 120px;
   height: 120px;
@@ -104,6 +99,25 @@
   text-align: center;
   opacity: 0;
   visibility: hidden;
+  scale: 0.6;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s,
+    visibility 0s 0.3s, scale 0.3s;
+}
+
+.quick-menu.is-show .quick-join {
+  opacity: 1;
+  visibility: visible;
+  scale: 1;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.35s, visibility 0s,
+    scale 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .quick-join,
+  .quick-menu.is-show .quick-join {
+    scale: 1;
+    transition: none;
+  }
 }
 
 /* 헤더 버튼이 퀵버튼 자리로 굴러 내려오는 동안 잠깐 놓이는 대역 요소.
@@ -118,6 +132,7 @@
   border-radius: 999px;
   background: var(--color-green);
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+  font-weight: 800;
   letter-spacing: -0.02em;
   white-space: nowrap;
   color: #fff;

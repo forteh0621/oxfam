@@ -68,7 +68,7 @@
   line-height: 1.25;
   letter-spacing: -0.02em;
   color: #fff;
-  transition: transform 0.2s;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .btn-round::before {

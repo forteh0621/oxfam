@@ -58,25 +58,31 @@
 
 /* Visual */
 /* 항상 화면 한 칸을 채운다. 높이가 달라지므로 안쪽 요소는 비율이나 아래쪽 기준으로 잡는다 */
+/* 사진 위쪽 여백(아래 .bg01 참고)은 사진 윗줄의 벽 색(불투명도 0.85를 곱한 값)으로 채운다.
+   사진이 흐려지는 구간(152~242)과 같은 구간에서 검정으로 넘어가야 경계가 생기지 않는다 */
 .sc-visual {
   height: 100dvh;
-  background: #000;
+  background: linear-gradient(to bottom, #a3a29e 152px, #000 242px);
 }
 
 /* 인물 얼굴은 어떤 화면에서도 잘리면 안 된다. 사진을 화면 폭에 채우고 기준점을 인물 쪽(가로 72%)에 둬서
-   화면이 좁아지면 왼쪽 배경부터 잘려 나가게 한다. 두 장(배경·인물 누끼)은 같은 기준으로 겹친다 */
+   화면이 좁아지면 왼쪽 배경부터 잘려 나가게 한다. 두 장(배경·인물 누끼)은 같은 기준으로 겹친다.
+   피드백: 원본 사진은 머리가 사진 맨 위에 닿아 있어, 헤더 아래 56px를 띄우고 그만큼 사진을 줄인다 */
 .visual-bg .bg01,
 .visual-bg .bg02 {
-  top: 96px;
+  top: calc(96px + 56px);
   left: 0;
   width: 100%;
-  height: 100%;
+  height: calc(100% - 152px);
   object-fit: cover;
   object-position: 72% top;
 }
 
+/* 띄운 여백과 이어지도록 배경 사진만 윗부분을 흐리게 풀고, 인물 누끼(.bg02)는 선명하게 둔다 */
 .visual-bg .bg01 {
   opacity: 0.85;
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 90px);
+  mask-image: linear-gradient(to bottom, transparent, #000 90px);
 }
 
 /* 시안 1920×920 값. 위 도넛은 위쪽, 아래 도넛은 아래쪽 모서리 기준이라
@@ -255,9 +261,13 @@
 }
 
 /* Who We Are */
+/* 피드백: 제목(한 줄)과 영상이 한 화면에 들어오게 한다. 섹션은 화면 한 칸, 영상은 남는 높이에 맞춘 16:9로
+   가운데 둔다 (위 여백 100 + 제목 117 + 간격 40 = 영상 위 257, 아래 여백 60) */
 .sc-who {
-  height: 1349px;
-  padding-top: 158px;
+  --film-w: min(1440px, 100vw - 80px, (100dvh - 317px) * 16 / 9);
+  --film-h: calc(var(--film-w) * 9 / 16);
+  height: 100dvh;
+  padding-top: 100px;
   background: #adc958;
 }
 
@@ -299,29 +309,25 @@
 }
 
 /* 스프링클: 가로 위치·크기는 시안 1920 값 × --px-pc로 화면 폭에 비례해 줄어든다.
-   세로는 필름(top 398, 시안 높이 810, 16:9) 위쪽은 그대로, 옆·아래는 필름 높이를 따라 움직인다 */
-.who-deco {
-  --film-h: calc(min(1440px, 100vw - 80px) * 9 / 16);
-}
-
+   세로는 필름(top 257, 높이 --film-h) 위쪽은 제목과 겹치지 않는 자리, 옆·아래는 필름 높이를 따라 움직인다 */
 .who-deco .spr01 {
   left: calc(50% - 229 * var(--px-pc));
-  top: 104px;
+  top: 24px;
   width: calc(56 * var(--px-pc));
   height: calc(65 * var(--px-pc));
 }
 
 .who-deco .spr02 {
   left: calc(50% + 228 * var(--px-pc));
-  top: 278px;
+  top: 50px;
   width: calc(38 * var(--px-pc));
   height: calc(44 * var(--px-pc));
 }
 
-/* 필름 아래 56 */
+/* 필름 아래 여백이 60뿐이라 필름 왼쪽 바깥, 아래에서 60 지점 */
 .who-deco .spr03 {
-  left: calc(50% - 192 * var(--px-pc));
-  top: calc(398px + var(--film-h) + 56px);
+  left: calc(50% - var(--film-w) / 2 - 80 * var(--px-pc));
+  top: calc(257px + var(--film-h) - 60px);
   width: calc(38 * var(--px-pc));
   height: calc(44 * var(--px-pc));
 }
@@ -329,15 +335,15 @@
 /* 필름 위에서 498/810 지점 */
 .who-deco .spr04 {
   left: calc(50% + 888 * var(--px-pc));
-  top: calc(398px + var(--film-h) * 498 / 810);
+  top: calc(257px + var(--film-h) * 498 / 810);
   width: calc(32 * var(--px-pc));
   height: calc(37 * var(--px-pc));
 }
 
-/* 필름 아래 24 */
+/* 필름 오른쪽 바깥, 아래에서 110 지점 */
 .who-deco .spr05 {
-  left: calc(50% + 418 * var(--px-pc));
-  top: calc(398px + var(--film-h) + 24px);
+  left: calc(50% + var(--film-w) / 2 + 40 * var(--px-pc));
+  top: calc(257px + var(--film-h) - 110px);
   width: calc(56 * var(--px-pc));
   height: calc(65 * var(--px-pc));
 }
@@ -345,7 +351,7 @@
 /* 필름 위에서 134/810 지점 */
 .who-deco .spr06 {
   left: calc(50% - 839 * var(--px-pc));
-  top: calc(398px + var(--film-h) * 134 / 810);
+  top: calc(257px + var(--film-h) * 134 / 810);
   width: calc(33 * var(--px-pc));
   height: calc(38 * var(--px-pc));
 }
@@ -357,14 +363,15 @@
     -19.2 * var(--px-pc),
     calc(max(40px, 50% - 720px) - 135 * var(--px-pc))
   );
-  top: 253px;
+  top: 150px;
   width: calc(56 * var(--px-pc));
   height: calc(65 * var(--px-pc));
 }
 
 .who-film {
   position: relative;
-  margin-top: 50px;
+  width: var(--film-w);
+  margin: 40px auto 0;
   aspect-ratio: 16 / 9;
   overflow: hidden;
   background: #000;
@@ -1392,6 +1399,11 @@
   margin: 0 0 0 -35px;
 }
 
+/* 모바일에서만 더 두는 크림보이 */
+.crew-track .char.mo-only {
+  display: none;
+}
+
 /* 피드백: 줄이 흐르는 동안 도넛은 구르고 크림보이는 걷는다.
    주기는 JS가 흐름 속도에 맞춰 --crew-spin / --crew-walk로 넣는다 */
 .crew-track .char .cream-boy {
@@ -1475,7 +1487,9 @@
    거기서 문구 왼쪽 여백(40px, 1520 이상은 폭/2 − 720)과 간격 50px을 뺀 자리에
    두 줄 문구(글자 크기의 7.31배 폭)가 들어가도록 줄인다 */
 @media all and (min-width: 769px) {
+  /* 피드백: 유독 두꺼워 보인다 → 제목 공통 자간(-0.02em)을 풀어 글자 사이를 띄운다 (서체는 900 한 굵기뿐) */
   .sc-visual .tit {
+    letter-spacing: 0;
     font-size: clamp(
       2rem,
       min(calc(9.85vw - 7.21dvh - 12.3px), calc(3.01vw - 7.21dvh + 91.7px)),
@@ -1500,6 +1514,11 @@
   .sc-who {
     height: auto;
     padding: 80px 0;
+  }
+
+  /* 한 화면에 맞추는 크기는 PC만. 좁은 화면은 컨테이너 폭을 그대로 쓴다 */
+  .who-film {
+    width: auto;
   }
 
   .who-deco .spr {
@@ -1632,8 +1651,15 @@
 
   /* 모바일 시안(122:1522) 사진 구도. 두 얼굴의 가운데를 기준점으로 잡아 화면 비율이 달라도 얼굴이 안 잘린다.
      헤더 흰 박스가 없어져 사진은 화면 맨 위부터 채운다 */
+  .sc-visual {
+    background: #000;
+  }
+
   .visual-bg .bg01 {
     top: 0;
+    height: 100%;
+    -webkit-mask-image: none;
+    mask-image: none;
     object-position: 68.6% 38%;
     opacity: 1;
   }
@@ -1679,8 +1705,9 @@
   }
 
   /* 시안(122:1566) 모바일 28px */
+  /* 피드백: 사진을 덜 가리도록 문구를 위쪽으로 올린다 */
   .sc-intro .tit {
-    padding: 267px 20px 0;
+    padding: 90px 20px 0;
     font-size: 1.75rem;
   }
 
@@ -1698,19 +1725,19 @@
     height: 175px;
   }
 
-  /* 피드백: 스크롤 길이를 줄이기 위해 아래 도넛 자리를 축소했다 */
+  /* 피드백: 지구 도넛을 줄여 제목 오른쪽으로 올리고, 아래 도넛 자리를 없애 스크롤 길이를 줄인다 */
   .sc-story {
     height: auto;
-    padding: 84px 0 340px;
+    padding: 84px 0 80px;
   }
 
-  /* 도넛 230px = PC 트랙(도넛 682px)의 0.3374배. 도넛 중심을 가로 가운데에 맞춤 */
+  /* 트랙을 0.165배(778px)로 줄이면 도넛(JS에서 0.8배, 545.6)이 90px.
+     트랙 끝점(4431, 532.5 → 731, 88)을 제목 오른쪽(가운데 + 115, 위 118)에 맞춘다 */
   .story-track {
-    left: calc(50% - 1495px);
-    top: auto;
-    bottom: -45px;
-    width: 1591px;
-    height: 396.3px;
+    left: calc(50% + 115px - 731px);
+    top: 30px;
+    width: 778px;
+    height: 193.8px;
   }
 
   .story-txt {
@@ -1862,22 +1889,23 @@
     white-space: normal;
   }
 
+  /* 피드백: 크림보이를 줄인다 (PC 273×174의 0.62배). 위 카드 자동 넘김에 맞춰 좌우로 걸어간다 (js doStepScroll) */
   .do-deco {
-    width: 221px;
-    height: 141px;
-    margin: 31px 0 0 3px;
+    width: 169.3px;
+    height: 107.9px;
+    margin: 31px 0 0;
   }
 
   .do-deco .char01 {
-    top: 45.4px;
-    width: 82.1px;
-    height: 110.8px;
+    top: 34.7px;
+    width: 62.9px;
+    height: 84.8px;
   }
 
   .do-deco .char02 {
-    left: 74.1px;
-    width: 146.9px;
-    height: 141px;
+    left: 56.7px;
+    width: 112.4px;
+    height: 107.9px;
   }
 
   /* 배경 요소는 새 시안에서 빠졌다 — 되돌릴 경우 대비해 보류
@@ -2051,5 +2079,20 @@
 
   .crew-btn {
     margin-top: 53px;
+  }
+
+  /* 피드백: 하단 CTA 버튼을 키운다 (16/40px 16px → 20/56px 20px) */
+  .crew-btn .btn-round {
+    padding: 20px 56px;
+    font-size: 1.25rem;
+  }
+
+  /* 피드백: 모바일은 PC보다 느려 보여 흐름을 두 배로 (60s → 30s, JS crewFlow도 같은 값으로 구르기·걷기 주기를 맞춘다) */
+  .crew-track.is-flow {
+    animation-duration: 30s;
+  }
+
+  .crew-track .char.mo-only {
+    display: block;
   }
 }

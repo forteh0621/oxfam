@@ -23,14 +23,16 @@ $(function () {
   headerScroll();
   quickMenu();
   visualDonut();
-  btnBite();
+  // 피드백: 버튼 호버는 확대만 남기고 부스러기 모션을 뺀다 (되돌릴 경우 대비해 보류)
+  // btnBite();
   storyDonutRoll();
   storyTextUp();
   whoIntro();
   doMobileSlide();
   doStepScroll();
   rollSlide();
-  goalReveal();
+  // 피드백: 목표 배너 섹션 모션 전체 삭제 (PC·모바일, 되돌릴 경우 대비해 보류)
+  // goalReveal();
   crewFlow();
   // 고정(pin) 구간이 모두 만들어진 뒤에 걸어야 아래쪽 제목의 시작 위치가 맞다
   titleFadeUp();
@@ -55,7 +57,6 @@ function quickMenu() {
   var join = menu.querySelector('.quick-join');
   var header = document.querySelector('.header');
   var root = document.documentElement;
-  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var state = false;
   var ghost = null;
   var tl = null;
@@ -91,6 +92,7 @@ function quickMenu() {
 
   // 헤더 버튼이 우하단 퀵버튼 자리로 굴러 내려오고, 올라갈 땐 알약 모양으로 되돌아간다.
   // 실제 두 버튼은 감춰 두고 같은 모양의 대역 요소(ghost) 하나만 움직인다
+  // (피드백으로 굴러 내려오는 모션을 쓰지 않는다 — 되돌릴 경우 대비해 보류)
   function morph(show) {
     // 올라갈 땐 헤더가 숨어 있으면 착지할 자리가 없다. 먼저 내려 둔다
     if (!show && header) header.classList.remove('is-hide');
@@ -159,34 +161,22 @@ function quickMenu() {
       .to(label, { autoAlpha: 1, duration: 0.25 }, 0.55);
   }
 
-  // 피드백: 모바일은 헤더 버튼이 없고 퀵버튼을 스크롤과 상관없이 항상 보여 준다
+  // 피드백: 모바일은 헤더 버튼이 없어 처음부터 보여 주되, 마지막 섹션(도넛 크루)부터는 감춘다
   var mobile = window.matchMedia('(max-width: 768px)');
+  var crew = document.querySelector('.sc-crew');
 
+  // 피드백: 굴러 내려오는 모션(morph)을 쓰지 않는다. PC는 상단 흰색 바가 스크롤로 벗어나는 순간부터 보인다.
+  // 등장은 CSS(.quick-menu.is-show)가 제자리에서 살짝 커지며 나타나게 한다
   function toggle(y) {
-    var plain = reduceMotion || mobile.matches;
-    var show = mobile.matches || y > window.innerHeight * 0.6;
+    // 모바일은 도넛 크루 섹션이 화면 절반까지 올라오면 감춘다 (그 전엔 목표 배너를 보는 중)
+    var show = mobile.matches ?
+      !crew || crew.getBoundingClientRect().top > window.innerHeight * 0.5 :
+      y > header.offsetHeight;
     if (show === state) return;
     state = show;
 
-    if (plain) {
-      if (tl) tl.kill();
-      tl = null;
-      if (ghost) {
-        ghost.remove();
-        ghost = null;
-      }
-      menu.classList.toggle('is-show', show);
-      root.classList.toggle('is-quick', show);
-      gsap.set(join, { autoAlpha: show ? 1 : 0 });
-
-      clearTimeout(biteTimer);
-      join.classList.remove('is-bite');
-      if (show && !reduceMotion) biteTimer = setTimeout(biteOnce, 620);
-      return;
-    }
-
-    if (!show) menu.classList.remove('is-show');
-    morph(show);
+    menu.classList.toggle('is-show', show);
+    root.classList.toggle('is-quick', show);
   }
 
   toggle(window.scrollY);
@@ -301,6 +291,7 @@ function crewFlow() {
   if (!$tracks.length) return;
 
   var edge = 60;
+  var mobile = window.matchMedia('(max-width: 768px)');
 
   $tracks.each(function () {
     var $items = $(this).children();
@@ -315,8 +306,8 @@ function crewFlow() {
     row01.style.marginLeft = (window.innerWidth - setWidth * 2 + edge) + 'px';
     row02.style.marginLeft = -edge + 'px';
 
-    // 줄은 60초에 한 세트 폭만큼 흐른다. 그 속도에 맞춰 도넛 자전·걷기 주기를 맞춘다
-    var speed = setWidth / 60;
+    // 줄은 60초(모바일은 CSS와 같이 30초)에 한 세트 폭만큼 흐른다. 그 속도에 맞춰 도넛 자전·걷기 주기를 맞춘다
+    var speed = setWidth / (mobile.matches ? 30 : 60);
     var donut = row01.querySelector('li:not(.char) img');
     var boy = document.querySelector('.crew-track .char .cream-boy');
     if (!speed || !donut || !boy) return;
@@ -340,6 +331,11 @@ function crewFlow() {
     return;
   }
 
+  // 피드백: 모바일은 줄이 화면 밖 800px에서 3.6초 동안 들어오느라 크림보이가 늦게 보였다 →
+  // 짧은 거리를 빠르게 들어와 첫 화면부터 크림보이가 보이게 한다
+  var shift = mobile.matches ? 120 : 800;
+  var enter = mobile.matches ? 1.2 : 3.6;
+
   gsap.timeline({
     scrollTrigger: {
       trigger: '.sc-crew .crew-rows',
@@ -348,8 +344,8 @@ function crewFlow() {
     },
     onStart: flow
   })
-    .fromTo('.sc-crew .row01', { x: -800, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 3.6, ease: 'power3.out' }, 0)
-    .fromTo('.sc-crew .row02', { x: 800, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 3.6, ease: 'power3.out' }, 0);
+    .fromTo('.sc-crew .row01', { x: -shift, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: enter, ease: 'power3.out' }, 0)
+    .fromTo('.sc-crew .row02', { x: shift, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: enter, ease: 'power3.out' }, 0);
 }
 
 function whoIntro() {
@@ -364,14 +360,50 @@ function whoIntro() {
   deco.classList.add('is-burst');
   gsap.set(sprs, { autoAlpha: 0 });
 
+  var film = section.querySelector('.who-film');
+  var mm = gsap.matchMedia();
+
   var tl = gsap.timeline({
     scrollTrigger: {
       trigger: section,
       start: 'top 70%',
       once: true
     }
-  })
-    .fromTo(section.querySelector('.who-film'), { scale: 0.96, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: 0.8, ease: 'power2.out' }, 0);
+  });
+
+  // 피드백: 7섹션(목표 배너)에서 뺀 모션을 여기에 모은다. PC는 제목과 영상이 한 화면에 들어온 채로 섹션을 고정하고,
+  // 작은 카드였던 영상이 스크롤을 따라 제자리 크기로 커진다
+  mm.add('(min-width: 1025px)', function () {
+    gsap.timeline({
+      defaults: { ease: 'none' },
+      scrollTrigger: {
+        trigger: section,
+        start: 'top top',
+        end: '+=60%',
+        scrub: 1,
+        pin: true,
+        invalidateOnRefresh: true
+      }
+    })
+      .fromTo(film, { scale: 0.7, borderRadius: 24 }, { scale: 1, borderRadius: 0 });
+
+    ScrollTrigger.sort();
+  });
+
+  // 좁은 화면은 고정 없이 섹션에 들어올 때 한 번 떠오른다
+  mm.add('(max-width: 1024px)', function () {
+    gsap.fromTo(film, { scale: 0.96, autoAlpha: 0 }, {
+      scale: 1,
+      autoAlpha: 1,
+      duration: 0.8,
+      ease: 'power2.out',
+      scrollTrigger: {
+        trigger: section,
+        start: 'top 70%',
+        once: true
+      }
+    });
+  });
 
   // 폭죽처럼: 한참 아래에서 빠르게 솟아 제자리보다 살짝 위까지 튀었다가 내려앉고, 그때부터 둥실 모션을 잇는다
   sprs.forEach(function (el) {
@@ -612,6 +644,12 @@ function doMobileSlide() {
     });
     play = autoplayInView(swiper, wrap);
 
+    // 아래 크림보이가 카드 넘김에 맞춰 걷도록 진행 비율(0~1)을 알린다 (doStepScroll)
+    swiper.on('slideChange', function () {
+      var last = Math.max(1, swiper.snapGrid.length - 1);
+      list.closest('section').dispatchEvent(new CustomEvent('doslide', { detail: Math.min(swiper.snapIndex / last, 1) }));
+    });
+
     return true;
   }
 
@@ -683,9 +721,13 @@ function doStepScroll() {
     });
   }
 
+  // 보폭·도넛 반지름은 PC 크기(크림보이 높이 136.8) 기준이라 모바일처럼 줄어든 크기에 맞춰 비례로 줄인다.
+  // 왼쪽으로 걸을 땐(좌우 반전) 이동 방향을 뒤집어 다리·도넛이 앞으로 굴러가게 한다
   function walk() {
     var x = gsap.getProperty(deco, 'x');
-    var phase = (x / stride) % 1;
+    var dir = gsap.getProperty(deco, 'scaleX') < 0 ? -1 : 1;
+    var k = char.offsetHeight / 136.8 || 1;
+    var phase = ((dir * x) / (stride * k)) % 1;
     if (phase < 0) phase += 1;
 
     var frame = Math.floor(phase * walkFrames) % walkFrames;
@@ -693,7 +735,7 @@ function doStepScroll() {
 
     char.style.webkitMaskPosition = pos;
     char.style.maskPosition = pos;
-    gsap.set(donut, { rotation: (x / donutRadius) * (180 / Math.PI) });
+    gsap.set(donut, { rotation: ((dir * x) / (donutRadius * k)) * (180 / Math.PI) });
   }
 
   mm.add('(min-width: 1025px) and (prefers-reduced-motion: no-preference)', function () {
@@ -712,7 +754,8 @@ function doStepScroll() {
       }
     });
 
-    tl.fromTo(items, { autoAlpha: 0, y: 60 }, { autoAlpha: 1, y: 0, duration: 1, stagger: 1 }, 0)
+    // 피드백: 떠오르기 시작할 때 카드가 아래 크림보이·도넛과 겹치지 않도록 출발 위치를 60 → 20으로 줄이고 조금 작게 시작한다
+    tl.fromTo(items, { autoAlpha: 0, y: 20, scale: 0.96 }, { autoAlpha: 1, y: 0, scale: 1, duration: 1, stagger: 1 }, 0)
       .fromTo(deco, { x: 0 }, {
         x: function () {
           return deco.parentElement.clientWidth - deco.offsetWidth;
@@ -740,14 +783,38 @@ function doStepScroll() {
 
     function clear() {
       gsap.set(items, { clearProps: used });
-      gsap.set(deco, { clearProps: used });
     }
 
+    // 크림보이·도넛은 아래(슬라이드에 맞춰 걷기)가 위치를 쓰므로 들어올 때 한 번만 걷어낸다
+    gsap.set(deco, { clearProps: used });
     clear();
     ScrollTrigger.addEventListener('refresh', clear);
 
     return function () {
       ScrollTrigger.removeEventListener('refresh', clear);
+    };
+  });
+
+  // 피드백: 슬라이드로 보는 폭에서는 위 카드가 자동으로 넘어갈 때마다 크림보이가 도넛을 밀며
+  // 그 진행 비율만큼 좌우로 걸어간다 (처음으로 되감길 땐 돌아서서 왼쪽으로). 넘김 속도(1초)와 같은 시간
+  mm.add('(max-width: 1024px) and (prefers-reduced-motion: no-preference)', function () {
+    function onSlide(e) {
+      var to = (deco.parentElement.clientWidth - deco.offsetWidth) * e.detail;
+      var from = gsap.getProperty(deco, 'x');
+      if (Math.abs(to - from) < 1) return;
+
+      gsap.set(deco, { scaleX: to < from ? -1 : 1 });
+      gsap.to(deco, { x: to, duration: 1, ease: 'power1.inOut', overwrite: 'auto', onUpdate: walk });
+    }
+
+    section.addEventListener('doslide', onSlide);
+
+    return function () {
+      section.removeEventListener('doslide', onSlide);
+      gsap.killTweensOf(deco);
+      gsap.set(deco, { clearProps: 'transform' });
+      char.style.webkitMaskPosition = '';
+      char.style.maskPosition = '';
     };
   });
 }
@@ -1009,8 +1076,10 @@ function storyDonutRoll() {
   var mask = svg.querySelector('.track-mask');
   var donut = svg.querySelector('.track-donut');
   var total = guide.getTotalLength();
-  var radius = 341;
-  var endAngle = -96.86;
+  // 피드백: 지구를 조금 줄이고(0.8배), 다 굴러왔을 때 북반구가 위로 똑바로 서게(원래 그림 각도 0) 한다
+  var scale = 0.8;
+  var radius = 341 * scale;
+  var endAngle = 0;
   var viewWidth = svg.viewBox.baseVal.width;
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var startLen = 0;
@@ -1035,25 +1104,27 @@ function storyDonutRoll() {
     var pt = guide.getPointAtLength(len);
     var angle = endAngle - ((total - len) / radius) * (180 / Math.PI);
 
-    donut.setAttribute('transform', 'translate(' + pt.x + ' ' + pt.y + ') rotate(' + angle + ')');
+    donut.setAttribute('transform', 'translate(' + pt.x + ' ' + pt.y + ') rotate(' + angle + ') scale(' + scale + ')');
     mask.setAttribute('width', pt.x);
   }
 
   gsap.registerPlugin(ScrollTrigger);
   ScrollTrigger.create({
     trigger: section,
-    // 모바일은 도넛이 섹션 바닥 쪽에 있어 바닥 기준으로 구간을 잡는다.
-    // 피드백으로 구간을 2배로 늘려 도넛이 더 천천히 굴러오게 했다
+    // 피드백: 더 빨리 굴러와 글이 다 나타나는 순간(마지막 주석이 떠오르는 화면 70% 지점) 글 옆에 멈춘다.
+    // 모바일은 지구가 제목 옆에 있어 섹션 윗부분이 화면 위쪽에 닿을 때까지 굴러온다
     start: function () {
-      return isMobile() ? 'bottom bottom+=800' : 'top bottom';
+      return isMobile() ? 'top 90%' : 'top 80%';
     },
+    endTrigger: isMobile() ? section : section.querySelector('.story-note'),
     end: function () {
-      return isMobile() ? 'bottom bottom-=40' : 'top top-=' + window.innerHeight * 0.6;
+      return isMobile() ? 'top 25%' : 'top 70%';
     },
     onRefresh: function (self) {
-      // 화면 왼쪽 가장자리를 SVG 좌표로 환산해 도넛이 화면 밖에서 출발하게 한다 (모바일은 SVG가 축소됨)
+      // 화면 왼쪽 가장자리를 SVG 좌표로 환산해, 도넛이 화면 밖이 아니라 왼쪽 끝 롤링 패스 위에서 출발하게 한다
+      // (모바일은 SVG가 축소됨)
       var rect = svg.getBoundingClientRect();
-      startLen = lengthAtX(-rect.left / (rect.width / viewWidth) - radius);
+      startLen = lengthAtX(-rect.left / (rect.width / viewWidth) + radius);
       render(self.progress);
     },
     onUpdate: function (self) {
