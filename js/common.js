@@ -832,45 +832,76 @@ function rollSlide() {
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   // 슬라이드로 바뀌는 폭은 스크롤바로 위치를 보여 주므로 순환하지 않는다 (순환하면 스크롤바가 튄다)
   var isMobile = window.innerWidth <= 1024;
+  var swiper = null;
+  var play = null;
+  var timer = null;
+  // 처음 화면에 보이는 카드가 굴러 들어오는 동안은 자동 넘김을 시작하지 않는다
+  var rolled = reduceMotion;
 
-  var swiper = new Swiper(el, {
-    loop: !isMobile,
-    speed: 700,
-    a11y: { enabled: false },
-    // 화면에 걸린 카드에만 swiper-slide-visible이 붙는다 (바깥 카드를 CSS로 감춘다)
-    watchSlidesProgress: true,
-    // PC는 자동 넘김을 끈다(이전 피드백). 슬라이드로 바뀌는 폭은 What We Do와 같이
-    // 2초 보여 준 뒤 자동으로 넘기고 끝에서 처음으로 되감는다(피드백)
-    autoplay: reduceMotion || !isMobile ? false : {
-      delay: 2000,
-      disableOnInteraction: false
-    },
-    rewind: isMobile,
-    slidesPerGroup: 1,
-    // 모바일에 옆으로 넘길 수 있다는 표시를 둔다
-    scrollbar: {
-      el: '.sc-roll .roll-pager',
-      draggable: true
-    },
-    // 좁은 화면은 손으로 밀어 보고, PC는 컨테이너를 4등분해 카드 폭을 딱 맞춘다
-    breakpoints: {
-      // 간격은 CSS margin이 아니라 여기서 줘야 끝까지 넘겼을 때 마지막 카드가 잘리지 않는다
-      0: {
-        slidesPerView: 'auto',
-        spaceBetween: 5,
-        allowTouchMove: true
+  // 순환(loop)·되감기(rewind)·자동 넘김은 만들 때 정해져 창 폭이 바뀌어도 따라가지 않는다.
+  // PC 폭으로 연 뒤 좁히면 순환이 남아 끝 카드 뒤에 첫 카드가 붙고 끝 여백이 사라졌다 → 기준(1024)을 넘으면 다시 만든다
+  function build() {
+    swiper = new Swiper(el, {
+      loop: !isMobile,
+      speed: 700,
+      a11y: { enabled: false },
+      // 화면에 걸린 카드에만 swiper-slide-visible이 붙는다 (바깥 카드를 CSS로 감춘다)
+      watchSlidesProgress: true,
+      // PC는 자동 넘김을 끈다(이전 피드백). 슬라이드로 바뀌는 폭은 What We Do와 같이
+      // 2초 보여 준 뒤 자동으로 넘기고 끝에서 처음으로 되감는다(피드백)
+      autoplay: reduceMotion || !isMobile ? false : {
+        delay: 2000,
+        disableOnInteraction: false
       },
-      1025: {
-        slidesPerView: 4,
-        spaceBetween: 7,
-        allowTouchMove: false
+      rewind: isMobile,
+      slidesPerGroup: 1,
+      // 모바일에 옆으로 넘길 수 있다는 표시를 둔다
+      scrollbar: {
+        el: '.sc-roll .roll-pager',
+        draggable: true
+      },
+      // 좁은 화면은 손으로 밀어 보고, PC는 컨테이너를 4등분해 카드 폭을 딱 맞춘다
+      breakpoints: {
+        // 간격은 CSS margin이 아니라 여기서 줘야 끝까지 넘겼을 때 마지막 카드가 잘리지 않는다
+        0: {
+          slidesPerView: 'auto',
+          spaceBetween: 5,
+          allowTouchMove: true
+        },
+        1025: {
+          slidesPerView: 4,
+          spaceBetween: 7,
+          allowTouchMove: false
+        }
       }
-    }
-  });
+    });
 
-  // PC는 네 장이 컨테이너에 딱 맞으므로 슬라이드로 바뀌는 폭에서만 화면 끝까지 흐르게 한다
-  bleedSwiper(swiper, function () {
-    return window.innerWidth <= 1024;
+    // PC는 네 장이 컨테이너에 딱 맞으므로 슬라이드로 바뀌는 폭에서만 화면 끝까지 흐르게 한다
+    bleedSwiper(swiper, function () {
+      return window.innerWidth <= 1024;
+    });
+
+    play = autoplayInView(swiper, '.sc-roll .roll-slide', function () {
+      return rolled;
+    });
+  }
+
+  build();
+
+  $(window).on('resize', function () {
+    clearTimeout(timer);
+    timer = setTimeout(function () {
+      if ((window.innerWidth <= 1024) === isMobile) return;
+
+      isMobile = !isMobile;
+      if (play) play.kill();
+      swiper.destroy(true, true);
+      // 화면 끝까지 넓히느라 넣은 여백은 새로 만들 때 다시 잰다
+      el.style.marginLeft = '';
+      el.style.marginRight = '';
+      build();
+      ScrollTrigger.refresh();
+    }, 200);
   });
 
   $('.sc-roll .btn-next').on('click', function () {
@@ -880,12 +911,6 @@ function rollSlide() {
   if (reduceMotion) return;
 
   var rollIn = 140;
-  // 처음 화면에 보이는 카드만 굴러 들어온다.
-  // 자동 넘김은 등장 전에 넘어가 카드가 어긋나지 않게 멈춰 두었다가 등장이 끝나면 시작한다
-  var rolled = false;
-  var play = autoplayInView(swiper, '.sc-roll .roll-slide', function () {
-    return rolled;
-  });
 
   var cards = el.querySelectorAll('.roll-frame.swiper-slide-visible');
   gsap.set(cards, { autoAlpha: 0 });
@@ -898,7 +923,7 @@ function rollSlide() {
       gsap.timeline({
         onComplete: function () {
           rolled = true;
-          if (play && play.isActive) swiper.autoplay.start();
+          if (play && play.isActive && swiper.params.autoplay.enabled) swiper.autoplay.start();
         }
       })
         .fromTo(cards, {
