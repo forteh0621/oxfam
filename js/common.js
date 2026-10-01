@@ -319,6 +319,14 @@ function crewFlow() {
     root.style.setProperty('--crew-spin', (Math.PI * donut.offsetHeight / speed).toFixed(2) + 's');
     // What We Do와 같은 비율의 보폭(표시 높이 136.8px에 170px)
     root.style.setProperty('--crew-walk', ((170 * boy.offsetHeight / 136.8) / speed).toFixed(2) + 's');
+
+    // 피드백: 복제한 크림보이(위 append)나 모바일에서 새로 보이는 크림보이는 걷기 시작 시점이 달라
+    // 윗줄·아랫줄 다리 동작이 1~2프레임씩 어긋나 보였다 → 모든 걷기 애니메이션의 시작 시점을 같게 맞춘다
+    if (document.getAnimations) {
+      document.getAnimations().forEach(function (a) {
+        if (a.animationName === 'crewWalk') a.startTime = 0;
+      });
+    }
   }
 
   function flow() {
@@ -1038,6 +1046,20 @@ function titleFadeUp() {
   }
 }
 
+// Donut Story 끝 지점(스크롤 위치): 마지막 글 덩어리(강조 문구)가 화면 70%에 오는 곳.
+// 다만 화면이 낮으면 그때 제목(모바일은 제목 옆 지구)이 위로 잘리므로, 그 윗변이 화면 맨 위에 닿기 전으로 당긴다.
+// 지구 도넛(storyDonutRoll)은 여기서 멈추고 마지막 글(storyTextUp)은 여기서 떠올라, 한 화면에서 함께 끝난다
+function storyEndScroll() {
+  var section = document.querySelector('.sc-story');
+  var gap = 20 * Math.max(1, window.innerWidth / 1920);
+  var top = function (el) {
+    return el.getBoundingClientRect().top + window.scrollY;
+  };
+  var head = window.innerWidth <= 768 ? section.querySelector('.track-donut') : section.querySelector('.tit-group');
+
+  return Math.min(top(section.querySelector('.story-point')) - window.innerHeight * 0.7, top(head) - gap);
+}
+
 // Donut Story: 시안 메모(소개 영역 — 스크롤에 따라 텍스트를 나눠 보여 준다)대로 네 덩어리로 나눠 떠오른다.
 // ① 제목 묶음(공통 titleFadeUp) ② 첫 두 문단 ③ 세 번째 문단 ④ 강조 문구 + 주석.
 // 한 번에 여러 덩어리가 화면에 들어오면 앞 덩어리가 시작한 뒤 0.35초씩 차례로 이어서 떠오른다
@@ -1059,8 +1081,9 @@ function storyTextUp() {
 
     ScrollTrigger.create({
       trigger: items[0],
-      // 첫 덩어리가 제목(화면 60%에서 시작)보다 먼저 뜨지 않도록 조금 더 올라왔을 때 시작
-      start: 'top 70%',
+      // 첫 덩어리가 제목(화면 60%에서 시작)보다 먼저 뜨지 않도록 조금 더 올라왔을 때 시작.
+      // 마지막 덩어리는 지구 도넛이 멈추는 지점(storyEndScroll)에서 함께 떠오른다
+      start: i === steps.length - 1 ? storyEndScroll : 'top 70%',
       once: true,
       onEnter: function () {
         var now = gsap.ticker.time;
@@ -1075,11 +1098,6 @@ function storyTextUp() {
           ease: 'power3.out',
           clearProps: 'opacity,visibility,transform'
         });
-
-        // 지구 도넛(storyDonutRoll)도 같은 시간·이징으로 이 덩어리 몫만큼 굴러, 마지막 글과 함께 멈춘다
-        section.dispatchEvent(new CustomEvent('storystep', {
-          detail: { progress: (i + 1) / steps.length, delay: delay, duration: 1.1, ease: 'power3.out' }
-        }));
       }
     });
   });
@@ -1158,6 +1176,10 @@ function storyDonutRoll() {
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var startLen = 0;
 
+  function isMobile() {
+    return window.innerWidth <= 768;
+  }
+
   function lengthAtX(x) {
     var lo = 0;
     var hi = total;
@@ -1169,10 +1191,8 @@ function storyDonutRoll() {
     return lo;
   }
 
-  var roll = { progress: reduceMotion ? 1 : 0 };
-
   function render(progress) {
-    var len = startLen + (total - startLen) * progress;
+    var len = startLen + (total - startLen) * (reduceMotion ? 1 : progress);
     var pt = guide.getPointAtLength(len);
     var angle = endAngle - ((total - len) / radius) * (180 / Math.PI);
 
@@ -1180,30 +1200,24 @@ function storyDonutRoll() {
     mask.setAttribute('width', pt.x);
   }
 
-  // 화면 왼쪽 가장자리를 SVG 좌표로 환산해, 도넛이 화면 밖이 아니라 왼쪽 끝 롤링 패스 위에서 출발하게 한다
-  // (모바일은 SVG가 축소됨). 창 크기가 바뀌면 다시 잰다
-  function measure() {
-    var rect = svg.getBoundingClientRect();
-    startLen = lengthAtX(-rect.left / (rect.width / viewWidth) + radius);
-    render(roll.progress);
-  }
-
   gsap.registerPlugin(ScrollTrigger);
-  measure();
-  ScrollTrigger.addEventListener('refresh', measure);
-
-  // 피드백(3차): 스크롤 위치가 아니라 글 덩어리(storyTextUp)가 떠오를 때마다 같은 시간·이징으로 그 몫만큼 굴러,
-  // 마지막 강조 문구·주석이 다 떠오르는 순간 함께 멈춘다. 이어서 떠오르면 앞 구르기를 이어받는다
-  section.addEventListener('storystep', function (e) {
-    gsap.to(roll, {
-      progress: e.detail.progress,
-      duration: e.detail.duration,
-      delay: e.detail.delay,
-      ease: e.detail.ease,
-      overwrite: 'auto',
-      onUpdate: function () {
-        render(roll.progress);
-      }
-    });
+  ScrollTrigger.create({
+    trigger: section,
+    // 피드백: 스크롤을 따라 굴러오다 마지막 글이 떠오르는 지점(storyEndScroll)에서 글 옆에 멈춘다.
+    // 그 순간 제목·글·지구가 한 화면에 함께 보인다
+    start: function () {
+      return isMobile() ? 'top 90%' : 'top 80%';
+    },
+    end: storyEndScroll,
+    onRefresh: function (self) {
+      // 화면 왼쪽 가장자리를 SVG 좌표로 환산해, 도넛이 화면 밖이 아니라 왼쪽 끝 롤링 패스 위에서 출발하게 한다
+      // (모바일은 SVG가 축소됨)
+      var rect = svg.getBoundingClientRect();
+      startLen = lengthAtX(-rect.left / (rect.width / viewWidth) + radius);
+      render(self.progress);
+    },
+    onUpdate: function (self) {
+      render(self.progress);
+    }
   });
 }
