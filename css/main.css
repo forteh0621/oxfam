@@ -876,10 +876,10 @@
   color: #fe71ad;
 }
 
-/* 피드백(3차): 크림보이 손끝이 도넛에 닿지 않도록 도넛을 20px(모바일 12.4px) 오른쪽으로 띄우고 그만큼 상자를 넓힌다 */
+/* 피드백(3차): 크림보이 손끝이 도넛에 닿되 겹치지 않도록(걷는 24프레임·도넛 회전 중 가장 가까운 순간 간격 0) 도넛을 9.4px(모바일 6.4px) 오른쪽으로 옮기고 그만큼 상자를 넓힌다 */
 .do-deco {
   position: relative;
-  width: calc(293 * var(--u));
+  width: calc(282.4 * var(--u));
   height: calc(174 * var(--u));
   margin-top: calc(49 * var(--u));
 }
@@ -899,7 +899,7 @@
 }
 
 .do-deco .char02 {
-  left: calc(111.45 * var(--u));
+  left: calc(100.85 * var(--u));
   top: 0;
   width: calc(181.35 * var(--u));
   height: calc(174 * var(--u));
@@ -1429,8 +1429,9 @@
   height: calc(230 * var(--u));
 }
 
+/* 손 쪽 간격은 크림보이마다 HTML의 --hand-pc / --hand-mo로 맞춘다 (앞 도넛에 닿되 겹치지 않게) */
 .crew-track .char {
-  margin: 0 0 0 calc(-35 * var(--u));
+  margin: 0 calc(var(--hand-pc, 0) * var(--u)) 0 calc(-35 * var(--u));
 }
 
 /* 모바일에서만 더 두는 크림보이 */
@@ -1449,7 +1450,7 @@
 }
 
 .crew-track .char.flip {
-  margin: 0 calc(11 * var(--u)) 0 calc(-48 * var(--u));
+  margin: 0 calc(11 * var(--u)) 0 calc(-50.2 * var(--u));
 }
 
 .crew-track .char.flip .cream-boy {
@@ -1928,7 +1929,7 @@
 
   /* 피드백: 크림보이를 줄인다 (PC 273×174의 0.62배). 위 카드 자동 넘김에 맞춰 좌우로 걸어간다 (js doStepScroll) */
   .do-deco {
-    width: calc(181.7 * var(--u));
+    width: calc(175.7 * var(--u));
     height: calc(107.9 * var(--u));
     margin: calc(31 * var(--u)) 0 0;
   }
@@ -1940,7 +1941,7 @@
   }
 
   .do-deco .char02 {
-    left: calc(69.1 * var(--u));
+    left: calc(63.1 * var(--u));
     width: calc(112.4 * var(--u));
     height: calc(107.9 * var(--u));
   }
@@ -2108,7 +2109,7 @@
   }
 
   .crew-track .char {
-    margin: 0 0 0 calc(-16 * var(--u));
+    margin: 0 calc(var(--hand-mo, 0) * var(--u)) 0 calc(-16 * var(--u));
   }
 
   .crew-track .char .cream-boy {
@@ -2117,7 +2118,7 @@
   }
 
   .crew-track .char.flip {
-    margin: 0 calc(5 * var(--u)) 0 calc(-22 * var(--u));
+    margin: 0 calc(5 * var(--u)) 0 calc(-23.2 * var(--u));
   }
 
   .crew-btn {
