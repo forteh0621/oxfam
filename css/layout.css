@@ -1,6 +1,6 @@
 #wrap {
   width: 100%;
-  min-width: 320px;
+  min-width: calc(320 * var(--u));
   position: relative;
   margin: 0 auto;
   overflow: hidden;
@@ -20,7 +20,7 @@
 }
 
 .inner {
-  max-width: 1200px;
+  max-width: calc(1200 * var(--u));
   position: relative;
   margin-left: auto;
   margin-right: auto;
@@ -56,15 +56,15 @@
 }
 
 .header .inner {
-  max-width: 1440px;
-  height: 96px;
+  max-width: calc(1440 * var(--u));
+  height: calc(96 * var(--u));
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
 .header .logo {
-  width: 130px;
+  width: calc(130 * var(--u));
 }
 
 .header .logo a,
@@ -80,20 +80,20 @@
 /* Quick Menu */
 .quick-menu {
   position: fixed;
-  right: 40px;
-  bottom: 40px;
+  right: calc(40 * var(--u));
+  bottom: calc(40 * var(--u));
   z-index: 90;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
+  gap: calc(12 * var(--u));
 }
 
 /* 피드백: 굴러 내려오는 모션을 없애고 제자리에서 살짝 커지며 나타난다 (js quickMenu가 .is-show를 붙인다).
    글꼴은 가독성을 위해 본문과 같은 Pretendard. 등장 크기는 호버 확대(transform)와 겹치지 않게 scale 속성으로 */
 .quick-join {
-  width: 120px;
-  height: 120px;
+  width: calc(120 * var(--u));
+  height: calc(120 * var(--u));
   font-size: 1.25rem;
   line-height: 1.3;
   text-align: center;
@@ -129,9 +129,9 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  border-radius: 999px;
+  border-radius: calc(999 * var(--u));
   background: var(--color-green);
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 calc(10 * var(--u)) calc(24 * var(--u)) rgba(0, 0, 0, 0.18);
   font-weight: 800;
   letter-spacing: -0.02em;
   white-space: nowrap;
@@ -180,17 +180,17 @@
 /* 시안(667:3124): 본문과 같은 1440 폭, 위아래 40, 글자 16px 행간 1.3.
    줄 간격은 시안 줄 위치(0·25·65·90·118·169)에 맞춘 값 */
 .footer {
-  padding: 40px 0;
-  border-top: 1px solid #e0e0e0;
+  padding: calc(40 * var(--u)) 0;
+  border-top: calc(1 * var(--u)) solid #e0e0e0;
   background: #fff;
 }
 
 .footer .inner {
-  max-width: 1440px;
+  max-width: calc(1440 * var(--u));
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 32px;
+  gap: calc(32 * var(--u));
 }
 
 .ft-info {
@@ -208,7 +208,7 @@
 }
 
 .ft-detail {
-  margin-top: 22px;
+  margin-top: calc(22 * var(--u));
 }
 
 .ft-detail div {
@@ -216,12 +216,12 @@
 }
 
 .ft-detail div + div {
-  margin-top: 10px;
+  margin-top: calc(10 * var(--u));
 }
 
 .ft-detail dt {
   flex: none;
-  width: 120px;
+  width: calc(120 * var(--u));
   font-weight: 700;
   color: #222;
 }
@@ -236,7 +236,7 @@
 }
 
 .ft-copy {
-  margin-top: 30px;
+  margin-top: calc(30 * var(--u));
   font-size: 0.875rem;
   font-weight: 700;
 }
@@ -253,15 +253,15 @@
 .ft-menu {
   display: flex;
   align-items: center;
-  padding-top: 4px;
+  padding-top: calc(4 * var(--u));
 }
 
 .ft-menu li + li::before {
   content: "";
   display: inline-block;
-  width: 1px;
-  height: 16px;
-  margin: 0 16px;
+  width: calc(1 * var(--u));
+  height: calc(16 * var(--u));
+  margin: 0 calc(16 * var(--u));
   background: #e0e0e0;
   vertical-align: middle;
 }
@@ -276,19 +276,19 @@
 
 .ft-sns {
   display: flex;
-  gap: 12px;
+  gap: calc(12 * var(--u));
 }
 
 .ft-sns a,
 .ft-sns img {
   display: block;
-  height: 32px;
+  height: calc(32 * var(--u));
 }
 
 @media all and (max-width: 1520px) {
   .header .inner,
   .footer .inner {
-    max-width: calc(100% - 80px);
+    max-width: calc(100% - calc(80 * var(--u)));
   }
 }
 
@@ -302,15 +302,15 @@
 
 @media all and (max-width: 768px) {
   .inner {
-    margin-left: 20px;
-    margin-right: 20px;
+    margin-left: calc(20 * var(--u));
+    margin-right: calc(20 * var(--u));
   }
 
   /* 아이폰 노치·상태바와 겹치지 않게 그만큼 아래로 민다.
      피드백: 모바일은 흰 박스 없이 로고만 사진 위에 두고, 고정하지 않아 위로 스크롤해도 다시 나타나지 않는다 */
   .header {
     position: absolute;
-    padding-top: env(safe-area-inset-top, 0px);
+    padding-top: env(safe-area-inset-top, 0);
     background: transparent;
   }
 
@@ -320,11 +320,11 @@
 
   .header .inner {
     max-width: none;
-    height: 70px;
+    height: calc(70 * var(--u));
   }
 
   .header .logo {
-    width: 83px;
+    width: calc(83 * var(--u));
   }
 
   /* 피드백: 모바일은 상단 CTA 버튼을 처음부터 없애고 우하단 퀵버튼만 항상 고정으로 쓴다 (js quickMenu) */
@@ -341,29 +341,29 @@
 
   /* 시안(754:4825): 96×96, 360×680 화면에서 오른쪽 13·아래 55 */
   .quick-menu {
-    right: 13px;
-    bottom: 55px;
-    gap: 9px;
+    right: calc(13 * var(--u));
+    bottom: calc(55 * var(--u));
+    gap: calc(9 * var(--u));
   }
 
   .quick-join {
-    width: 96px;
-    height: 96px;
+    width: calc(96 * var(--u));
+    height: calc(96 * var(--u));
     font-size: 1.25rem;
   }
 
   .quick-top {
-    width: 80px;
-    height: 80px;
+    width: calc(80 * var(--u));
+    height: calc(80 * var(--u));
   }
 
   .quick-top img {
-    width: 36px;
-    height: 37px;
+    width: calc(36 * var(--u));
+    height: calc(37 * var(--u));
   }
 
   .footer {
-    padding: 40px 0;
+    padding: calc(40 * var(--u)) 0;
   }
 
   .footer .inner {
@@ -382,19 +382,19 @@
      항목명 열은 좁은 화면에 맞춰 줄이고, 긴 주소는 값 열 안에서 줄바꿈된다 */
   .ft-detail {
     order: 2;
-    margin-top: 16px;
+    margin-top: calc(16 * var(--u));
   }
 
   .ft-detail dt {
-    width: 80px;
+    width: calc(80 * var(--u));
   }
 
   .ft-menu {
     order: 3;
     flex-direction: column;
     align-items: flex-start;
-    gap: 16px;
-    margin-top: 32px;
+    gap: calc(16 * var(--u));
+    margin-top: calc(32 * var(--u));
     padding-top: 0;
   }
 
@@ -409,12 +409,12 @@
 
   .ft-sns {
     order: 4;
-    margin-top: 52px;
+    margin-top: calc(52 * var(--u));
   }
 
   .ft-copy {
     order: 5;
-    margin-top: 24px;
+    margin-top: calc(24 * var(--u));
     line-height: 1;
   }
 }

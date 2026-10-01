@@ -126,12 +126,12 @@ button {
 }
 
 :focus-visible {
-  outline: 2px solid var(--basic-text);
-  outline-offset: 2px;
+  outline: calc(2 * var(--u)) solid var(--basic-text);
+  outline-offset: calc(2 * var(--u));
 }
 
 select {
-  padding-left: 5px;
+  padding-left: calc(5 * var(--u));
   border: none;
   background: url(/image/common/select_arrow.png) no-repeat 95% 50%;
   -webkit-appearance: none;
@@ -196,7 +196,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 input[type="date"] {
   position: relative;
-  width: 100px;
+  width: calc(100 * var(--u));
 }
 
 input[type="date"]::before {
@@ -247,8 +247,21 @@ input::placeholder {
   color: var(--basic-text);
 }
 
+/* 크기 단위: CSS의 px 값은 모두 calc(N * var(--u))로 쓴다.
+   1920 이하는 1px 그대로, 그보다 넓은 화면(브라우저 축소 포함)은 화면 폭에 비례해 커져
+   어떤 배율에서도 100%일 때와 같은 모습이 된다 */
+:root {
+  --u: 1px;
+}
+
+@media all and (min-width: 1921px) {
+  :root {
+    --u: calc(100vw / 1920);
+  }
+}
+
 html {
-  font-size: 16px;
+  font-size: calc(16 * var(--u));
 }
 
 body {
@@ -261,7 +274,7 @@ body {
 
 img,
 fieldset {
-  border: 0px;
+  border: 0;
 }
 
 img {
@@ -270,7 +283,7 @@ img {
 
 hr {
   border: 0;
-  height: 1px;
+  height: calc(1 * var(--u));
   background: var(--colordd);
 }
 
@@ -281,9 +294,9 @@ caption {
   display: block;
   position: absolute;
   border: 0;
-  width: 1px;
-  height: 1px;
-  clip: rect(1px, 1px, 1px, 1px);
+  width: calc(1 * var(--u));
+  height: calc(1 * var(--u));
+  clip: rect(calc(1 * var(--u)), calc(1 * var(--u)), calc(1 * var(--u)), calc(1 * var(--u)));
 }
 
 @media print {

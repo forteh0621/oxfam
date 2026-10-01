@@ -3,12 +3,12 @@
    --px-pc: 시안 1920 기준 1px / --px-mo: 시안 360 기준 1px(414px 폭, 1.15배에서 멈춤) */
 .main {
   --px-pc: calc(100vw / 1920);
-  --px-mo: min(100vw / 360, 1.15px);
+  --px-mo: min(100vw / 360, calc(1.15 * var(--u)));
   letter-spacing: -0.02em;
 }
 
 .main .inner {
-  max-width: 1440px;
+  max-width: calc(1440 * var(--u));
 }
 
 .main section {
@@ -47,7 +47,7 @@
 .sc-intro .tit,
 .sc-goal .tit {
   position: relative;
-  padding-top: 387px;
+  padding-top: calc(387 * var(--u));
   text-align: center;
 }
 
@@ -62,7 +62,7 @@
    사진이 흐려지는 구간(152~242)과 같은 구간에서 검정으로 넘어가야 경계가 생기지 않는다 */
 .sc-visual {
   height: 100dvh;
-  background: linear-gradient(to bottom, #a3a29e 152px, #000 242px);
+  background: linear-gradient(to bottom, #a3a29e calc(152 * var(--u)), #000 calc(242 * var(--u)));
 }
 
 /* 인물 얼굴은 어떤 화면에서도 잘리면 안 된다. 사진을 화면 폭에 채우고 기준점을 인물 쪽(가로 72%)에 둬서
@@ -70,10 +70,10 @@
    피드백: 원본 사진은 머리가 사진 맨 위에 닿아 있어, 헤더 아래 56px를 띄우고 그만큼 사진을 줄인다 */
 .visual-bg .bg01,
 .visual-bg .bg02 {
-  top: calc(96px + 56px);
+  top: calc(calc(96 * var(--u)) + calc(56 * var(--u)));
   left: 0;
   width: 100%;
-  height: calc(100% - 152px);
+  height: calc(100% - calc(152 * var(--u)));
   object-fit: cover;
   object-position: 72% top;
 }
@@ -81,8 +81,8 @@
 /* 띄운 여백과 이어지도록 배경 사진만 윗부분을 흐리게 풀고, 인물 누끼(.bg02)는 선명하게 둔다 */
 .visual-bg .bg01 {
   opacity: 0.85;
-  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 90px);
-  mask-image: linear-gradient(to bottom, transparent, #000 90px);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 calc(90 * var(--u)));
+  mask-image: linear-gradient(to bottom, transparent, #000 calc(90 * var(--u)));
 }
 
 /* 시안 1920×920 값. 위 도넛은 위쪽, 아래 도넛은 아래쪽 모서리 기준이라
@@ -116,7 +116,7 @@
 .scroll-hint {
   position: absolute;
   left: 50%;
-  bottom: 41px;
+  bottom: calc(41 * var(--u));
   z-index: 1;
 
   display: flex;
@@ -134,7 +134,7 @@
   }
 
   30% {
-    transform: translateX(-50%) translateY(-7px);
+    transform: translateX(-50%) translateY(calc(-7 * var(--u)));
   }
 
   50% {
@@ -142,7 +142,7 @@
   }
 
   65% {
-    transform: translateX(-50%) translateY(-3px);
+    transform: translateX(-50%) translateY(calc(-3 * var(--u)));
   }
 
   80% {
@@ -150,15 +150,15 @@
   }
 }
 .scroll-hint .ico {
-  width: 48px;
-  height: 39px;
+  width: calc(48 * var(--u));
+  height: calc(39 * var(--u));
   background: #fff;
   -webkit-mask: url(../image/main/icon-scroll.png) no-repeat center / contain;
   mask: url(../image/main/icon-scroll.png) no-repeat center / contain;
 }
 
 .scroll-hint p {
-  margin-top: 12px;
+  margin-top: calc(12 * var(--u));
   font-size: 1rem;
   font-weight: 600;
   line-height: 1;
@@ -168,7 +168,7 @@
 
 /* Intro */
 .sc-intro {
-  height: 920px;
+  height: calc(920 * var(--u));
   background: #000;
 }
 
@@ -179,14 +179,14 @@
 }
 
 .intro-bg .bg {
-  top: -299px;
-  height: 1440px;
+  top: calc(-299 * var(--u));
+  height: calc(1440 * var(--u));
   opacity: 0.4;
 }
 
 .intro-bg .edge {
-  bottom: -4px;
-  height: 303px;
+  bottom: calc(-4 * var(--u));
+  height: calc(303 * var(--u));
 }
 
 /* 가장자리 PNG의 맨 아래 줄이 반투명이라 검정 배경이 비쳐 선이 생겼다.
@@ -197,14 +197,14 @@
   left: 0;
   right: 0;
   bottom: 0;
-  height: 24px;
+  height: calc(24 * var(--u));
   background: linear-gradient(to bottom, rgba(247, 247, 235, 0), #f7f7eb 70%);
 }
 
 /* Donut Story */
 .sc-story {
-  height: 1104px;
-  padding-top: 171px;
+  height: calc(1104 * var(--u));
+  padding-top: calc(171 * var(--u));
   background: #f7f7eb;
 }
 
@@ -213,10 +213,10 @@
    (가로 50% + 347, 위 609.5)에 오도록 옮긴다 */
 .story-track {
   position: absolute;
-  left: calc(50% - 3197.8px);
-  top: 183.5px;
-  width: 3771.87px;
-  height: 939.53px;
+  left: calc(50% - calc(3197.8 * var(--u)));
+  top: calc(183.5 * var(--u));
+  width: calc(3771.87 * var(--u));
+  height: calc(939.53 * var(--u));
   overflow: visible;
   transform: rotate(-0.14deg);
 }
@@ -236,7 +236,7 @@
 }
 
 .story-txt {
-  margin-top: 40px;
+  margin-top: calc(40 * var(--u));
 }
 
 .story-txt p {
@@ -247,11 +247,11 @@
 }
 
 .story-txt p + p {
-  margin-top: 30px;
+  margin-top: calc(30 * var(--u));
 }
 
 .story-point {
-  margin-top: 40px;
+  margin-top: calc(40 * var(--u));
 }
 
 .story-point p {
@@ -262,7 +262,7 @@
 }
 
 .story-note {
-  margin-top: 20px;
+  margin-top: calc(20 * var(--u));
   font-size: 1rem;
   font-weight: 500;
   line-height: 1.5;
@@ -274,10 +274,10 @@
    높이는 화면에서 남는 만큼(위 여백 100 + 제목 117 + 간격 40 = 영상 위 257, 아래 여백 60).
    16:9 비율에 묶지 않되 화면이 아주 길어도 16:9보다 길어지지는 않게 한다 */
 .sc-who {
-  --film-w: min(1440px, 100vw - 80px);
-  --film-h: min(var(--film-w) * 9 / 16, 100dvh - 317px);
+  --film-w: min(calc(1440 * var(--u)), 100vw - calc(80 * var(--u)));
+  --film-h: min(var(--film-w) * 9 / 16, 100dvh - calc(317 * var(--u)));
   height: 100dvh;
-  padding-top: 100px;
+  padding-top: calc(100 * var(--u));
   background: #adc958;
 }
 
@@ -310,17 +310,17 @@
 }
 
 .who-deco .donut01 {
-  left: calc(50% + 418px);
-  top: -125px;
-  width: 742px;
-  height: 724px;
+  left: calc(50% + calc(418 * var(--u)));
+  top: calc(-125 * var(--u));
+  width: calc(742 * var(--u));
+  height: calc(724 * var(--u));
 }
 
 .who-deco .donut02 {
-  left: calc(50% - 1229px);
-  top: 864px;
-  width: 710px;
-  height: 693px;
+  left: calc(50% - calc(1229 * var(--u)));
+  top: calc(864 * var(--u));
+  width: calc(710 * var(--u));
+  height: calc(693 * var(--u));
 }
 
 .who-deco .spr {
@@ -340,14 +340,14 @@
    세로는 필름(top 257, 높이 --film-h) 위쪽은 제목과 겹치지 않는 자리, 옆·아래는 필름 높이를 따라 움직인다 */
 .who-deco .spr01 {
   left: calc(50% - 229 * var(--px-pc));
-  top: 24px;
+  top: calc(24 * var(--u));
   width: calc(56 * var(--px-pc));
   height: calc(65 * var(--px-pc));
 }
 
 .who-deco .spr02 {
   left: calc(50% + 228 * var(--px-pc));
-  top: 50px;
+  top: calc(50 * var(--u));
   width: calc(38 * var(--px-pc));
   height: calc(44 * var(--px-pc));
 }
@@ -355,7 +355,7 @@
 /* 필름 아래 여백이 60뿐이라 필름 왼쪽 바깥, 아래에서 60 지점 */
 .who-deco .spr03 {
   left: calc(50% - var(--film-w) / 2 - 80 * var(--px-pc));
-  top: calc(257px + var(--film-h) - 60px);
+  top: calc(calc(257 * var(--u)) + var(--film-h) - calc(60 * var(--u)));
   width: calc(38 * var(--px-pc));
   height: calc(44 * var(--px-pc));
 }
@@ -363,7 +363,7 @@
 /* 필름 위에서 498/810 지점 */
 .who-deco .spr04 {
   left: calc(50% + 888 * var(--px-pc));
-  top: calc(257px + var(--film-h) * 498 / 810);
+  top: calc(calc(257 * var(--u)) + var(--film-h) * 498 / 810);
   width: calc(32 * var(--px-pc));
   height: calc(37 * var(--px-pc));
 }
@@ -371,7 +371,7 @@
 /* 필름 오른쪽 바깥, 아래에서 110 지점 */
 .who-deco .spr05 {
   left: calc(50% + var(--film-w) / 2 + 40 * var(--px-pc));
-  top: calc(257px + var(--film-h) - 110px);
+  top: calc(calc(257 * var(--u)) + var(--film-h) - calc(110 * var(--u)));
   width: calc(56 * var(--px-pc));
   height: calc(65 * var(--px-pc));
 }
@@ -379,7 +379,7 @@
 /* 필름 위에서 134/810 지점 */
 .who-deco .spr06 {
   left: calc(50% - 839 * var(--px-pc));
-  top: calc(257px + var(--film-h) * 134 / 810);
+  top: calc(calc(257 * var(--u)) + var(--film-h) * 134 / 810);
   width: calc(33 * var(--px-pc));
   height: calc(38 * var(--px-pc));
 }
@@ -389,9 +389,9 @@
 .who-deco .spr07 {
   left: max(
     -19.2 * var(--px-pc),
-    calc(max(40px, 50% - 720px) - 135 * var(--px-pc))
+    calc(max(calc(40 * var(--u)), 50% - calc(720 * var(--u))) - 135 * var(--px-pc))
   );
-  top: 150px;
+  top: calc(150 * var(--u));
   width: calc(56 * var(--px-pc));
   height: calc(65 * var(--px-pc));
 }
@@ -400,7 +400,7 @@
   position: relative;
   width: var(--film-w);
   height: var(--film-h);
-  margin: 40px auto 0;
+  margin: calc(40 * var(--u)) auto 0;
   aspect-ratio: 16 / 9;
   overflow: hidden;
   background: #000;
@@ -409,7 +409,7 @@
 }
 
 .who-film:hover {
-  box-shadow: 0 0 64px rgba(68, 132, 26, 0.35);
+  box-shadow: 0 0 calc(64 * var(--u)) rgba(68, 132, 26, 0.35);
 }
 
 /* 시안 마지막 장면(로고): 1440 기준 512×236 가운데 배치 */
@@ -431,12 +431,12 @@
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 88px;
-  height: 88px;
-  margin: -44px 0 0 -44px;
+  width: calc(88 * var(--u));
+  height: calc(88 * var(--u));
+  margin: calc(-44 * var(--u)) 0 0 calc(-44 * var(--u));
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.92);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 calc(10 * var(--u)) calc(30 * var(--u)) rgba(0, 0, 0, 0.25);
   transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
@@ -446,7 +446,7 @@
   left: 50%;
   top: 50%;
   border-style: solid;
-  border-width: 13px 0 13px 22px;
+  border-width: calc(13 * var(--u)) 0 calc(13 * var(--u)) calc(22 * var(--u));
   border-color: transparent transparent transparent var(--color-green);
   transform: translate(-38%, -50%);
 }
@@ -520,7 +520,7 @@
   }
 
   50% {
-    translate: 6px -22px;
+    translate: calc(6 * var(--u)) calc(-22 * var(--u));
     rotate: 14deg;
   }
 }
@@ -533,7 +533,7 @@
   }
 
   50% {
-    translate: -6px -26px;
+    translate: calc(-6 * var(--u)) calc(-26 * var(--u));
     rotate: -14deg;
   }
 }
@@ -780,8 +780,8 @@
 
 /* What We Do */
 .sc-do {
-  height: 920px;
-  padding-top: 117px;
+  height: calc(920 * var(--u));
+  padding-top: calc(117 * var(--u));
   background: #fe71ad;
 }
 
@@ -801,8 +801,8 @@
   position: relative;
   display: flex;
   justify-content: flex-start;
-  gap: clamp(17.7px, calc(1.872vw - 1.46px), 27px);
-  margin-top: 49px;
+  gap: clamp(calc(17.7 * var(--u)), calc(1.872vw - calc(1.46 * var(--u))), calc(27 * var(--u)));
+  margin-top: calc(49 * var(--u));
   text-align: center;
   color: #fff;
 }
@@ -815,24 +815,24 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: clamp(6.6px, calc(0.694vw - 0.54px), 8.54px);
+  gap: clamp(calc(6.6 * var(--u)), calc(0.694vw - calc(0.54 * var(--u))), calc(8.54 * var(--u)));
   min-width: 0;
-  min-height: clamp(190px, calc(20.11vw - 15.66px), 247.8px);
-  padding: clamp(9.2px, calc(0.971vw - 0.76px), 11.96px);
-  border-radius: clamp(13.1px, calc(1.387vw - 1.08px), 17.09px);
+  min-height: clamp(calc(190 * var(--u)), calc(20.11vw - calc(15.66 * var(--u))), calc(247.8 * var(--u)));
+  padding: clamp(calc(9.2 * var(--u)), calc(0.971vw - calc(0.76 * var(--u))), calc(11.96 * var(--u)));
+  border-radius: clamp(calc(13.1 * var(--u)), calc(1.387vw - calc(1.08 * var(--u))), calc(17.09 * var(--u)));
   background: #fff;
 }
 
 .do-list .tit {
-  font-size: clamp(21px, calc(2.219vw - 1.73px), 27.34px);
+  font-size: clamp(calc(21 * var(--u)), calc(2.219vw - calc(1.73 * var(--u))), calc(27.34 * var(--u)));
   line-height: 1.2;
   color: #221e1f;
 }
 
 /* 피드백: 박스 안 아이콘을 한 번 더 줄인다 (60 → 51.26 → 44) */
 .do-icon {
-  width: clamp(39.4px, calc(4.161vw - 3.24px), 44px);
-  height: clamp(39.4px, calc(4.161vw - 3.24px), 44px);
+  width: clamp(calc(39.4 * var(--u)), calc(4.161vw - calc(3.24 * var(--u))), calc(44 * var(--u)));
+  height: clamp(calc(39.4 * var(--u)), calc(4.161vw - calc(3.24 * var(--u))), calc(44 * var(--u)));
   background: #fe71ad;
   -webkit-mask-repeat: no-repeat;
   -webkit-mask-position: center;
@@ -863,24 +863,25 @@
 }
 
 .do-sub {
-  margin-top: 12px;
+  margin-top: calc(12 * var(--u));
   font-size: 1.25rem;
   font-weight: 700;
   line-height: 1;
 }
 
 .do-desc {
-  font-size: clamp(11.8px, calc(1.248vw - 0.97px), 15.38px);
+  font-size: clamp(calc(11.8 * var(--u)), calc(1.248vw - calc(0.97 * var(--u))), calc(15.38 * var(--u)));
   font-weight: 600;
   line-height: 1.5;
   color: #fe71ad;
 }
 
+/* 피드백(3차): 크림보이 손끝이 도넛에 닿지 않도록 도넛을 20px(모바일 12.4px) 오른쪽으로 띄우고 그만큼 상자를 넓힌다 */
 .do-deco {
   position: relative;
-  width: 273px;
-  height: 174px;
-  margin-top: 49px;
+  width: calc(293 * var(--u));
+  height: calc(174 * var(--u));
+  margin-top: calc(49 * var(--u));
 }
 
 /* 크림보이 걷기 스프라이트: 한 사이클 24프레임 가로 한 줄, 프레임 영역 518×699 기준 */
@@ -891,23 +892,23 @@
 
 .do-deco .char01 {
   left: 0;
-  top: 56px;
-  width: 101.4px;
-  height: 136.8px;
+  top: calc(56 * var(--u));
+  width: calc(101.4 * var(--u));
+  height: calc(136.8 * var(--u));
   background: #fff;
 }
 
 .do-deco .char02 {
-  left: 91.45px;
+  left: calc(111.45 * var(--u));
   top: 0;
-  width: 181.35px;
-  height: 174px;
+  width: calc(181.35 * var(--u));
+  height: calc(174 * var(--u));
 }
 
 /* We Roll the World */
 .sc-roll {
-  height: 988px;
-  padding-top: 153px;
+  height: calc(988 * var(--u));
+  padding-top: calc(153 * var(--u));
   background: #fffef8;
 }
 
@@ -1090,7 +1091,7 @@
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  gap: 47px;
+  gap: calc(47 * var(--u));
 }
 
 .roll-head .btn-round {
@@ -1099,7 +1100,7 @@
 
 .roll-slide {
   position: relative;
-  margin-top: 64px;
+  margin-top: calc(64 * var(--u));
 }
 
 /* 넘길 수 있다는 표시(안내 문구·스크롤바)는 슬라이드로 바뀌는 폭에서만 쓴다 */
@@ -1116,13 +1117,13 @@
   left: 0;
   bottom: auto;
   width: auto;
-  height: 4px;
-  border-radius: 999px;
+  height: calc(4 * var(--u));
+  border-radius: calc(999 * var(--u));
 }
 
 .do-pager.swiper-scrollbar .swiper-scrollbar-drag,
 .roll-pager.swiper-scrollbar .swiper-scrollbar-drag {
-  border-radius: 999px;
+  border-radius: calc(999 * var(--u));
 }
 
 /* 카드 폭은 이 컨테이너를 4등분해 정해진다(제목과 같은 .inner 안).
@@ -1142,12 +1143,12 @@
   flex: none;
   position: relative;
   aspect-ratio: 1;
-  border: 8px solid #fff;
+  border: calc(8 * var(--u)) solid #fff;
   border-radius: 50%;
   overflow: hidden;
   isolation: isolate;
   background: #fff;
-  box-shadow: 0 0 25px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 0 calc(25 * var(--u)) rgba(0, 0, 0, 0.25);
   opacity: 0;
   transition: opacity 0.35s ease;
 }
@@ -1282,7 +1283,7 @@
   left: 0;
   right: 0;
   top: 64%;
-  padding: 0 14px;
+  padding: 0 calc(14 * var(--u));
   font-family: "Pretendard", "Noto Sans KR", sans-serif;
   font-size: 1.125rem;
   font-weight: 700;
@@ -1293,22 +1294,22 @@
    세로는 카드 줄의 정가운데 (호버 확대가 transform을 쓰므로 위치는 top 계산으로 잡는다) */
 .btn-next {
   position: absolute;
-  right: -45px;
-  top: calc(50% - 42.5px);
+  right: calc(-45 * var(--u));
+  top: calc(50% - calc(42.5 * var(--u)));
   z-index: 2;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 85px;
-  height: 85px;
+  width: calc(85 * var(--u));
+  height: calc(85 * var(--u));
   border-radius: 50%;
   background: url(../image/main/icon-next-bg.svg) no-repeat center / 100% 100%;
   transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), filter 0.5s;
 }
 
 .btn-next img {
-  width: 35px;
-  height: 36px;
+  width: calc(35 * var(--u));
+  height: calc(36 * var(--u));
   transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -1371,16 +1372,16 @@
 
 /* Let’s Roll the World! */
 .sc-crew {
-  padding: 178px 0 160px;
+  padding: calc(178 * var(--u)) 0 calc(160 * var(--u));
   background: #fff;
 }
 
 .crew-rows {
-  margin-top: 69px;
+  margin-top: calc(69 * var(--u));
 }
 
 .crew-row.row02 {
-  margin-top: 19px;
+  margin-top: calc(19 * var(--u));
 }
 
 .crew-track {
@@ -1419,16 +1420,17 @@
 
 .crew-track li {
   flex: none;
-  margin-right: 46px;
+  margin-right: calc(46 * var(--u));
 }
 
+/* 피드백(3차): 도넛 SVG가 가로로 4%쯤 길어(238×230) 굴러갈 때 타원으로 보였다 → 가로세로를 같게 맞춰 정원으로 */
 .crew-track img {
-  width: auto;
-  height: 230px;
+  width: calc(230 * var(--u));
+  height: calc(230 * var(--u));
 }
 
 .crew-track .char {
-  margin: 0 0 0 -35px;
+  margin: 0 0 0 calc(-35 * var(--u));
 }
 
 /* 모바일에서만 더 두는 크림보이 */
@@ -1440,14 +1442,14 @@
    주기는 JS가 흐름 속도에 맞춰 --crew-spin / --crew-walk로 넣는다 */
 .crew-track .char .cream-boy {
   display: block;
-  width: 94.5px;
-  height: 127.5px;
+  width: calc(94.5 * var(--u));
+  height: calc(127.5 * var(--u));
   background: var(--color-green);
   animation: crewWalk var(--crew-walk, 2s) steps(24) infinite;
 }
 
 .crew-track .char.flip {
-  margin: 0 11px 0 -48px;
+  margin: 0 calc(11 * var(--u)) 0 calc(-48 * var(--u));
 }
 
 .crew-track .char.flip .cream-boy {
@@ -1477,7 +1479,7 @@
 }
 
 .crew-btn {
-  margin-top: 125px;
+  margin-top: calc(125 * var(--u));
   text-align: center;
 }
 
@@ -1507,11 +1509,11 @@
 
 @media all and (max-width: 1520px) {
   .main .inner {
-    max-width: calc(100% - 80px);
+    max-width: calc(100% - calc(80 * var(--u)));
   }
 
   .btn-next {
-    right: -20px;
+    right: calc(-20 * var(--u));
   }
 }
 
@@ -1522,7 +1524,7 @@
   .sc-visual .tit {
     font-size: clamp(
       2rem,
-      min(calc(9.85vw - 7.21dvh - 12.3px), calc(3.01vw - 7.21dvh + 91.7px)),
+      min(calc(9.85vw - 7.21dvh - calc(12.3 * var(--u))), calc(3.01vw - 7.21dvh + calc(91.7 * var(--u)))),
       5rem
     );
   }
@@ -1535,7 +1537,7 @@
     position: absolute;
     left: 0;
     right: 0;
-    bottom: max(151px, calc(17.3vw + 24px));
+    bottom: max(calc(151 * var(--u)), calc(17.3vw + calc(24 * var(--u))));
     padding-top: 0;
   }
 }
@@ -1543,7 +1545,7 @@
 @media all and (max-width: 1024px) {
   .sc-who {
     height: auto;
-    padding: 80px 0;
+    padding: calc(80 * var(--u)) 0;
   }
 
   /* 한 화면에 맞추는 크기는 PC만. 좁은 화면은 컨테이너 폭에 비율(16:9, 모바일은 아래에서 따로)대로 */
@@ -1559,12 +1561,12 @@
   /* 네 장을 더 줄이는 대신 여기부터는 좌우로 넘겨 본다 (JS가 스와이퍼 구조를 입힌다) */
   .sc-do {
     height: auto;
-    padding-bottom: 80px;
+    padding-bottom: calc(80 * var(--u));
   }
 
   .swipe-hint {
     display: block;
-    margin-top: 23px;
+    margin-top: calc(23 * var(--u));
     font-size: 0.875rem;
     font-weight: 500;
     line-height: 1;
@@ -1574,7 +1576,7 @@
   /* 넘기는 동안은 화면 끝까지 이어지고, 여백은 처음(왼쪽)·끝(오른쪽)에만 생긴다.
      좌우 넓히기와 시작·끝 여백은 JS(bleedSwiper)가 실제 컨테이너 여백을 재서 넣는다 */
   .sc-do .do-swiper {
-    margin-top: 14px;
+    margin-top: calc(14 * var(--u));
   }
 
   .do-list {
@@ -1586,14 +1588,14 @@
 
   .do-list li {
     flex: none;
-    width: 340px;
+    width: calc(340 * var(--u));
     max-width: none;
-    min-height: 290px;
+    min-height: calc(290 * var(--u));
   }
 
   .sc-do .do-pager {
     display: block;
-    margin-top: 30px;
+    margin-top: calc(30 * var(--u));
     background: rgba(255, 255, 255, 0.2);
   }
 
@@ -1602,17 +1604,17 @@
   }
 
   .do-deco {
-    margin-top: 60px;
+    margin-top: calc(60 * var(--u));
   }
 
   /* Roll도 같은 지점에서 슬라이드로 바뀐다. 원이 작아져 제목이 넘치던 구간을 없앤다 */
   .sc-roll {
     height: auto;
-    padding: 80px 0;
+    padding: calc(80 * var(--u)) 0;
   }
 
   .sc-roll .swipe-hint {
-    margin-top: 24px;
+    margin-top: calc(24 * var(--u));
     color: var(--color-green);
   }
 
@@ -1621,7 +1623,7 @@
      그림자까지 잘리지 않도록 잘라내는 상자만 왼쪽·위아래로 25px 넓혀 둔다 */
   /* 시안: 안내 문구와 카드 사이 20px. 좌우는 JS(bleedSwiper)가 화면 끝까지 넓힌다 */
   .roll-slide {
-    margin-top: 20px;
+    margin-top: calc(20 * var(--u));
     padding: 0;
   }
 
@@ -1630,7 +1632,7 @@
   }
 
   .roll-list .roll-frame {
-    width: 269px;
+    width: calc(269 * var(--u));
   }
 
   /* 시안: 좁은 화면은 아래쪽 그라데이션 대신 사진 전체에 딤을 깔고 제목을 가운데 둔다 */
@@ -1643,7 +1645,7 @@
   /* 시안(667:4293) 20px. 글자 상자가 원 안쪽 253px 중 241px까지 쓰므로 좌우 여백을 6px로 */
   .roll-card .tit {
     top: 50%;
-    padding: 0 6px;
+    padding: 0 calc(6 * var(--u));
     font-size: 1.25rem;
     transform: translateY(-50%);
   }
@@ -1655,7 +1657,7 @@
   /* 시안: 카드 아래 20px 띄워 스크롤바 */
   .sc-roll .roll-pager {
     display: block;
-    margin-top: 20px;
+    margin-top: calc(20 * var(--u));
     background: #ededed;
   }
 
@@ -1673,9 +1675,9 @@
      시안(667:4008)은 680 높이에서 425~529 자리 → 아래에서 151px 기준으로 잡아 높이가 달라져도 유지 */
   .sc-visual .inner {
     position: absolute;
-    left: 20px;
-    right: 20px;
-    bottom: 151px;
+    left: calc(20 * var(--u));
+    right: calc(20 * var(--u));
+    bottom: calc(151 * var(--u));
     margin: 0;
     padding-top: 0;
   }
@@ -1706,28 +1708,29 @@
      사진은 화면 높이를 따라 커지므로 폭만 따라 계속 커지면 넓은 화면에서 도넛이 얼굴을 덮는다.
      위 도넛은 오른쪽·위 끝, 아래 도넛은 왼쪽·아래 끝 기준이라 모서리에 걸치는 모양이 유지된다.
      위 도넛: 시안 left 219 → 오른쪽으로 141.93 넘침, top -119 / 아래 도넛: top 536 → 아래로 139 넘침 */
+  /* 피드백(3차): 위 도넛이 아이 머리를 가리고 아래 도넛이 제목에 붙어 보였다 → 위 도넛은 오른쪽 위로(18, 34), 아래 도넛은 왼쪽 아래로(14, 36) 비킨다 */
   .visual-bg .donut01 {
     left: auto;
-    right: calc(-141.93 * var(--px-mo));
-    top: calc(-119 * var(--px-mo));
+    right: calc(-159.93 * var(--px-mo));
+    top: calc(-153 * var(--px-mo));
     width: calc(282.93 * var(--px-mo));
     height: calc(276 * var(--px-mo));
   }
 
   .visual-bg .donut02 {
-    left: calc(-166 * var(--px-mo));
-    bottom: calc(-139 * var(--px-mo));
+    left: calc(-180 * var(--px-mo));
+    bottom: calc(-175 * var(--px-mo));
     width: calc(290.1 * var(--px-mo));
     height: calc(283 * var(--px-mo));
   }
 
   .scroll-hint {
-    bottom: 29px;
+    bottom: calc(29 * var(--u));
   }
 
   .scroll-hint .ico {
-    width: 40px;
-    height: 32px;
+    width: calc(40 * var(--u));
+    height: calc(32 * var(--u));
   }
 
   .scroll-hint p {
@@ -1735,13 +1738,13 @@
   }
 
   .sc-intro {
-    height: 680px;
+    height: calc(680 * var(--u));
   }
 
   /* 시안(122:1566) 모바일 28px */
   /* 피드백: 사진을 덜 가리도록 문구를 위쪽으로 올린다 */
   .sc-intro .tit {
-    padding: 90px 20px 0;
+    padding: calc(90 * var(--u)) calc(20 * var(--u)) 0;
     font-size: 1.75rem;
   }
 
@@ -1756,26 +1759,26 @@
 
   .intro-bg .edge {
     bottom: 0;
-    height: 175px;
+    height: calc(175 * var(--u));
   }
 
   /* 피드백: 지구 도넛을 줄여 제목 오른쪽으로 올리고, 아래 도넛 자리를 없애 스크롤 길이를 줄인다 */
   .sc-story {
     height: auto;
-    padding: 84px 0 80px;
+    padding: calc(84 * var(--u)) 0 calc(80 * var(--u));
   }
 
   /* 트랙을 0.132배(622.2px)로 줄이면 도넛(682)이 90px.
      트랙 끝점(4431, 532.5 → 584.8, 70.3)을 제목 오른쪽(가운데 + 115, 위 118)에 맞춘다 */
   .story-track {
-    left: calc(50% + 115px - 584.8px);
-    top: 47.7px;
-    width: 622.2px;
-    height: 155px;
+    left: calc(50% + calc(115 * var(--u)) - calc(584.8 * var(--u)));
+    top: calc(47.7 * var(--u));
+    width: calc(622.2 * var(--u));
+    height: calc(155 * var(--u));
   }
 
   .story-txt {
-    margin-top: 40px;
+    margin-top: calc(40 * var(--u));
   }
 
   /* 피드백: 줄바꿈은 시안(767:5039) 샘플 위치를 따른다 (HTML의 hide-768 / show-768 br) */
@@ -1785,11 +1788,11 @@
   }
 
   .story-txt p + p {
-    margin-top: 24px;
+    margin-top: calc(24 * var(--u));
   }
 
   .story-point {
-    margin-top: 40px;
+    margin-top: calc(40 * var(--u));
   }
 
   .story-point p {
@@ -1798,21 +1801,21 @@
   }
 
   .sc-who {
-    padding: 83px 0 67px;
+    padding: calc(83 * var(--u)) 0 calc(67 * var(--u));
   }
 
   .who-deco .donut01 {
-    left: calc(50% + 36px);
-    top: 66px;
-    width: 239px;
-    height: 233px;
+    left: calc(50% + calc(36 * var(--u)));
+    top: calc(66 * var(--u));
+    width: calc(239 * var(--u));
+    height: calc(233 * var(--u));
   }
 
   .who-deco .donut02 {
-    left: calc(50% - 304px);
-    top: 620px;
-    width: 249px;
-    height: 243px;
+    left: calc(50% - calc(304 * var(--u)));
+    top: calc(620 * var(--u));
+    width: calc(249 * var(--u));
+    height: calc(243 * var(--u));
   }
 
   .who-deco .spr {
@@ -1823,10 +1826,10 @@
      위: 영문 제목 위 띠(0~83)에서 위 도넛 왼쪽 / 아래: 필름 아래 띠(67)에서 아래 도넛 오른쪽.
      필름은 섹션 위에서 266px, 높이는 화면 폭 × 344/360 */
   .who-deco .spr01 {
-    left: calc(50% - 30px);
-    top: 30px;
-    width: 22px;
-    height: 19px;
+    left: calc(50% - calc(30 * var(--u)));
+    top: calc(30 * var(--u));
+    width: calc(22 * var(--u));
+    height: calc(19 * var(--u));
   }
 
   /* 피드백: 타이틀 옆 화면 가장자리에 걸쳐 하나만 남아 애매하던 스프링클들을 감춘다 */
@@ -1839,21 +1842,21 @@
 
   /* 둥실 모션이 위로 26px까지 떠오르므로 필름 아래 30px 이상 띄운다 */
   .who-deco .spr05 {
-    left: calc(50% + 10px);
-    top: calc(266px + 100vw * 344 / 360 + 38px);
-    width: 15px;
-    height: 13px;
+    left: calc(50% + calc(10 * var(--u)));
+    top: calc(calc(266 * var(--u)) + 100vw * 344 / 360 + calc(38 * var(--u)));
+    width: calc(15 * var(--u));
+    height: calc(13 * var(--u));
   }
 
   .who-deco .spr07 {
-    left: calc(50% + 115px);
-    top: calc(266px + 100vw * 344 / 360 + 32px);
-    width: 13px;
-    height: 11px;
+    left: calc(50% + calc(115 * var(--u)));
+    top: calc(calc(266 * var(--u)) + 100vw * 344 / 360 + calc(32 * var(--u)));
+    width: calc(13 * var(--u));
+    height: calc(11 * var(--u));
   }
 
   .who-film {
-    margin: 22px -20px 0;
+    margin: calc(22 * var(--u)) calc(-20 * var(--u)) 0;
     aspect-ratio: 360 / 344;
   }
 
@@ -1862,17 +1865,17 @@
   }
 
   .film-play {
-    width: 56px;
-    height: 56px;
-    margin: -28px 0 0 -28px;
+    width: calc(56 * var(--u));
+    height: calc(56 * var(--u));
+    margin: calc(-28 * var(--u)) 0 0 calc(-28 * var(--u));
   }
 
   .film-play::before {
-    border-width: 9px 0 9px 15px;
+    border-width: calc(9 * var(--u)) 0 calc(9 * var(--u)) calc(15 * var(--u));
   }
 
   .sc-do {
-    padding: 94px 0 60px;
+    padding: calc(94 * var(--u)) 0 calc(60 * var(--u));
   }
 
   /* 시안(667:4118)은 303×293 박스 안에서 도넛 그림만 18px 오른쪽으로 밀려 있다.
@@ -1892,21 +1895,21 @@
      카드는 한 장(360에서 300)씩, 간격 15(JS). 양옆으로 이웃 카드가 조금씩 보인다.
      카드 폭은 스와이퍼가 안쪽 여백을 뺀 폭으로 넣어 준다. 안쪽 요소는 수정 시안(754:4962) 크기 */
   .sc-do .do-swiper {
-    margin: 40px -20px 0;
+    margin: calc(40 * var(--u)) calc(-20 * var(--u)) 0;
     padding: 0 8.3333vw;
   }
 
   .do-list li {
     min-height: 0;
     height: auto;
-    gap: 8.54px;
-    padding: 16px 11.96px;
-    border-radius: 17.09px;
+    gap: calc(8.54 * var(--u));
+    padding: calc(16 * var(--u)) calc(11.96 * var(--u));
+    border-radius: calc(17.09 * var(--u));
   }
 
   .do-icon {
-    width: 44px;
-    height: 44px;
+    width: calc(44 * var(--u));
+    height: calc(44 * var(--u));
   }
 
   .do-list .tit {
@@ -1925,21 +1928,21 @@
 
   /* 피드백: 크림보이를 줄인다 (PC 273×174의 0.62배). 위 카드 자동 넘김에 맞춰 좌우로 걸어간다 (js doStepScroll) */
   .do-deco {
-    width: 169.3px;
-    height: 107.9px;
-    margin: 31px 0 0;
+    width: calc(181.7 * var(--u));
+    height: calc(107.9 * var(--u));
+    margin: calc(31 * var(--u)) 0 0;
   }
 
   .do-deco .char01 {
-    top: 34.7px;
-    width: 62.9px;
-    height: 84.8px;
+    top: calc(34.7 * var(--u));
+    width: calc(62.9 * var(--u));
+    height: calc(84.8 * var(--u));
   }
 
   .do-deco .char02 {
-    left: 56.7px;
-    width: 112.4px;
-    height: 107.9px;
+    left: calc(69.1 * var(--u));
+    width: calc(112.4 * var(--u));
+    height: calc(107.9 * var(--u));
   }
 
   /* 배경 요소는 새 시안에서 빠졌다 — 되돌릴 경우 대비해 보류
@@ -2025,27 +2028,27 @@
   .roll-head {
     flex-direction: column;
     align-items: flex-start;
-    gap: 20px;
+    gap: calc(20 * var(--u));
   }
 
   /* 시안(667:4139) 152×44: 위아래 14px, 글자 높이 16 */
   .roll-head .btn-round {
-    padding: 14px 40px;
+    padding: calc(14 * var(--u)) calc(40 * var(--u));
     line-height: 1;
   }
 
   /* 피드백: 카드를 줄여 화면에 1.8장 정도 보이게 한다 (컨테이너 320의 58% = 186, 테두리도 같은 비율로).
      제목은 가운데가 아니라 아래쪽(수정 시안 754:4324: 지름의 62.45% 지점)에 둔다 */
   .roll-list .roll-frame {
-    width: calc(var(--inner-w, 320px) * 0.58);
-    border-width: 5px;
+    width: calc(var(--inner-w, calc(320 * var(--u))) * 0.58);
+    border-width: calc(5 * var(--u));
   }
 
   /* 두 줄 제목이 시안 자리(윗변 62.45%)에 오도록 아랫변 18%에 맞춘다. 줄이 많은 제목은 위로 늘어나 원 아래로 잘리지 않는다 */
   .roll-card .tit {
     top: auto;
     bottom: 18%;
-    padding: 0 12px;
+    padding: 0 calc(12 * var(--u));
     font-size: 0.8125rem;
     line-height: 1.3;
     transform: none;
@@ -2060,7 +2063,7 @@
 
   /* 모바일 시안(754:4905): Pretendard Bold 23px 행간 1.3, 세 줄(달라도, / 하나입니다. / 하는 것) */
   .sc-goal .tit {
-    padding: 0 20px;
+    padding: 0 calc(20 * var(--u));
     font-size: 1.4375rem;
     line-height: 1.3;
   }
@@ -2078,7 +2081,7 @@
   }
 
   .sc-crew {
-    padding: 86px 0 85px;
+    padding: calc(86 * var(--u)) 0 calc(85 * var(--u));
   }
 
   /* 피드백 줄바꿈(차례입니다. / 되어, / 굴려요!)대로 첫 줄이 한 줄에 들어가도록 32 → 31px (360에서 325 → 315px) */
@@ -2087,42 +2090,43 @@
   }
 
   .crew-rows {
-    margin-top: 53px;
+    margin-top: calc(53 * var(--u));
   }
 
   /* 피드백: 흐르는 요소들의 배율을 한 단계 줄인다 */
   .crew-row.row02 {
-    margin-top: 9px;
+    margin-top: calc(9 * var(--u));
   }
 
   .crew-track li {
-    margin-right: 21px;
+    margin-right: calc(21 * var(--u));
   }
 
   .crew-track img {
-    height: 105px;
+    width: calc(105 * var(--u));
+    height: calc(105 * var(--u));
   }
 
   .crew-track .char {
-    margin: 0 0 0 -16px;
+    margin: 0 0 0 calc(-16 * var(--u));
   }
 
   .crew-track .char .cream-boy {
-    width: 43px;
-    height: 58px;
+    width: calc(43 * var(--u));
+    height: calc(58 * var(--u));
   }
 
   .crew-track .char.flip {
-    margin: 0 5px 0 -22px;
+    margin: 0 calc(5 * var(--u)) 0 calc(-22 * var(--u));
   }
 
   .crew-btn {
-    margin-top: 53px;
+    margin-top: calc(53 * var(--u));
   }
 
   /* 피드백: 하단 CTA 버튼을 키운다 (16/40px 16px → 20/56px 20px) */
   .crew-btn .btn-round {
-    padding: 20px 56px;
+    padding: calc(20 * var(--u)) calc(56 * var(--u));
     font-size: 1.25rem;
   }
 

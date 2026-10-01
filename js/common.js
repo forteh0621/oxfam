@@ -290,7 +290,6 @@ function crewFlow() {
   var $tracks = $('.sc-crew .crew-track');
   if (!$tracks.length) return;
 
-  var edge = 60;
   var mobile = window.matchMedia('(max-width: 768px)');
 
   $tracks.each(function () {
@@ -302,6 +301,8 @@ function crewFlow() {
     var row01 = document.querySelector('.sc-crew .row01');
     var row02 = document.querySelector('.sc-crew .row02');
     var setWidth = row01.querySelector('.crew-track').scrollWidth / 3;
+    // 1920보다 넓은 화면은 CSS(--u)처럼 여백도 화면 폭에 비례해 키운다
+    var edge = 60 * Math.max(1, window.innerWidth / 1920);
 
     row01.style.marginLeft = (window.innerWidth - setWidth * 2 + edge) + 'px';
     row02.style.marginLeft = -edge + 'px';
